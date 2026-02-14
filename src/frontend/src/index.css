@@ -77,7 +77,62 @@
     * {
         @apply border-border;
     }
+
+    html,
+    body,
+    #root {
+        height: 100%;
+        overflow: hidden;
+    }
+
     body {
         @apply bg-background text-foreground;
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Mobile layout adjustments */
+    .mobile-layout {
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Safe area support for mobile devices */
+    .safe-bottom {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .pb-safe-bottom {
+        padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+    }
+
+    @media (min-width: 768px) {
+        .pb-safe-bottom {
+            padding-bottom: 0;
+        }
+    }
+
+    /* Prevent double scroll on mobile */
+    @media (max-width: 767px) {
+        body {
+            position: fixed;
+            width: 100%;
+        }
+
+        .mobile-layout {
+            position: relative;
+            overflow: hidden;
+        }
+    }
+
+    /* Touch target improvements */
+    @media (max-width: 767px) {
+        button,
+        a,
+        [role="button"] {
+            min-height: 44px;
+            min-width: 44px;
+        }
     }
 }

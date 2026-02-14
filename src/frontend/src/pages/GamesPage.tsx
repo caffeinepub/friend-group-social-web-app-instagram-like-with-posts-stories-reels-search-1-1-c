@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import TicTacToe from '../games/tic-tac-toe/TicTacToe';
 import MemoryMatch from '../games/memory-match/MemoryMatch';
 import Snake from '../games/snake/Snake';
@@ -9,20 +9,23 @@ import Quiz from '../games/quiz/Quiz';
 
 export default function GamesPage() {
   return (
-    <div className="container max-w-4xl py-8">
+    <div className="container max-w-4xl py-4 md:py-8 px-3 md:px-4">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl">Games</CardTitle>
+        <CardHeader className="px-4 md:px-6 py-4 md:py-6">
+          <CardTitle className="text-xl md:text-3xl">Games</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
           <Tabs defaultValue="tictactoe">
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="tictactoe">Tic-Tac-Toe</TabsTrigger>
-              <TabsTrigger value="memory">Memory</TabsTrigger>
-              <TabsTrigger value="snake">Snake</TabsTrigger>
-              <TabsTrigger value="2048">2048</TabsTrigger>
-              <TabsTrigger value="quiz">Quiz</TabsTrigger>
-            </TabsList>
+            <ScrollArea className="w-full whitespace-nowrap">
+              <TabsList className="inline-flex w-auto md:grid md:w-full md:grid-cols-5">
+                <TabsTrigger value="tictactoe" className="px-3 md:px-4">Tic-Tac-Toe</TabsTrigger>
+                <TabsTrigger value="memory" className="px-3 md:px-4">Memory</TabsTrigger>
+                <TabsTrigger value="snake" className="px-3 md:px-4">Snake</TabsTrigger>
+                <TabsTrigger value="2048" className="px-3 md:px-4">2048</TabsTrigger>
+                <TabsTrigger value="quiz" className="px-3 md:px-4">Quiz</TabsTrigger>
+              </TabsList>
+              <ScrollBar orientation="horizontal" className="md:hidden" />
+            </ScrollArea>
             <TabsContent value="tictactoe">
               <TicTacToe />
             </TabsContent>

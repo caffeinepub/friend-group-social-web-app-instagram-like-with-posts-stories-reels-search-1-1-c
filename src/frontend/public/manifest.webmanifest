@@ -1,0 +1,26 @@
+{
+  "name": "Caffeine Social",
+  "short_name": "Caffeine",
+  "description": "Connect with friends on Caffeine Social - A modern social media platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/generated/caffeine-social-favicon.dim_64x64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/generated/caffeine-social-logo.dim_256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "lifestyle"],
+  "screenshots": []
+}

@@ -38,11 +38,11 @@ export default function ProfileSetupModal() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-accent/20 to-background p-4">
       <Card className="w-full max-w-lg shadow-2xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Complete Your Profile</CardTitle>
-          <CardDescription>Tell us a bit about yourself to get started</CardDescription>
+        <CardHeader className="text-center px-4 md:px-6 py-5 md:py-6">
+          <CardTitle className="text-xl md:text-2xl">Complete Your Profile</CardTitle>
+          <CardDescription className="text-sm">Tell us a bit about yourself to get started</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 md:px-6 pb-5 md:pb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="displayName">Display Name *</Label>
@@ -52,6 +52,7 @@ export default function ProfileSetupModal() {
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Your full name"
                 required
+                className="min-h-[44px]"
               />
             </div>
             <div className="space-y-2">
@@ -62,6 +63,7 @@ export default function ProfileSetupModal() {
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="@username"
                 required
+                className="min-h-[44px]"
               />
             </div>
             <div className="space-y-2">
@@ -72,11 +74,12 @@ export default function ProfileSetupModal() {
                 onChange={(e) => setBio(e.target.value)}
                 placeholder="Tell us about yourself..."
                 rows={3}
+                className="resize-none"
               />
             </div>
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full min-h-[44px]" 
               disabled={saveProfile.isPending}
             >
               {saveProfile.isPending ? 'Creating Profile...' : 'Create Profile'}

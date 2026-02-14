@@ -1,463 +1,126 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Caffeine Social — friend-group social app with feed, stories, reels, chat, games, music, and study/AI tools",
+  "title": "Fix startup loading issues and add Android APK download link",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Add Internet Identity sign-in/out UI and a first-login profile setup flow that loads/saves the user profile via the canister.",
+      "id": "REQ-22",
+      "summary": "Fix initial render so logged-out users always see Login quickly, logged-in users reliably reach the authenticated layout, and failures show an actionable error instead of infinite loading/blank screen.",
       "acceptanceCriteria": [
-        "User can sign in/out with Internet Identity from the app UI.",
-        "After first sign-in, user is prompted to set a username/handle and display name; values persist across sessions.",
-        "Returning users see their saved profile without re-entering details.",
-        "Profile data is stored in the backend canister and returned via query/update methods."
+        "Opening the deployed web app on a fresh browser session shows the Login screen within 5 seconds (no blank screen).",
+        "After signing in with Internet Identity, the app navigates into the authenticated experience and renders content (e.g., Feed) without being stuck on 'Loading...'.",
+        "If backend/actor initialization fails for any reason, the UI shows an English error state with a retry action instead of spinning indefinitely.",
+        "No uncaught exceptions appear in the browser console during initial load, login, and first navigation."
       ],
       "file_operations": [
         {
           "path": "frontend/src/App.tsx",
-          "operation": "create",
-          "description": "Create the app shell that reads auth state from useInternetIdentity (immutable) and conditionally renders authenticated sections vs. a sign-in screen; wire profile setup gating so first-time users must complete their profile before accessing the rest of the app. Use React Query cache clearing on logout (per selected component guidance). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/auth/LoginButton.tsx",
-          "operation": "create",
-          "description": "Add a reusable login/logout button using the Internet Identity hook (frontend constraint: compose, do not modify the hook). Ensure logout clears React Query cache. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/profile/ProfileSetupModal.tsx",
-          "operation": "create",
-          "description": "Create a modal for first-login profile setup (display name, username/handle, optional bio, optional avatar image upload). Use shadcn-ui components for dialog/inputs/buttons where appropriate. Avatar upload should use blob-storage ExternalBlob on the frontend when sending to backend (store reference in profile). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/queries/useCurrentUserProfile.ts",
-          "operation": "create",
-          "description": "Add React Query hooks that call backend getCallerUserProfile/saveCallerUserProfile using useActor (immutable), with proper enabled conditions to avoid profile-setup modal flash. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useAuthGuard.ts",
-          "operation": "create",
-          "description": "Create a small helper hook that centralizes: (a) authenticated/guest UI branching, (b) detecting whether profile setup is required (null profile), and (c) providing consistent loading/error states for guarded screens. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Implement user discovery: search profiles by username/handle and allow starting a 1:1 chat from search results.",
-      "acceptanceCriteria": [
-        "Search supports partial matching on username/handle.",
-        "Search results show display name + username + avatar (if present).",
-        "Selecting a user opens (or creates) a conversation thread between the two users."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/SearchPage.tsx",
-          "operation": "create",
-          "description": "Create an account search screen that queries backend searchUsernames with partial text and renders results. For each result, fetch associated profile details via getUserProfile and display displayName/username/avatar (using blob-storage ExternalBlob.getDirectURL when present). Selecting a result navigates to a chat thread with that user. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/queries/useUserSearch.ts",
-          "operation": "create",
-          "description": "Add React Query hook(s) to: (a) query searchUsernames(searchText), (b) fetch profiles for returned usernames (via getUserProfile once principal mapping is available/returned by backend interface), and (c) expose loading/error states to SearchPage. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
-          "operation": "create",
-          "description": "Add route registration for the Search section and wire navigation so the Search page is reachable from the main app navigation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Implement 1:1 chat UI with persistent history and polling-based refresh via React Query (no WebSockets).",
-      "acceptanceCriteria": [
-        "User can send a text message to another user and it is stored in the backend.",
-        "Conversation history loads correctly after refresh and after logging out/in.",
-        "Chat list shows existing conversations and last message preview.",
-        "No WebSockets are used; message refresh uses polling/refresh via React Query."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/ChatPage.tsx",
-          "operation": "create",
-          "description": "Create the chat section UI containing: (a) a conversation list area (existing threads + last message preview) and (b) a thread view for a selected partner with message history and a text composer. Use React Query with polling (refetchInterval) to refresh message history. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/chat/ChatThread.tsx",
-          "operation": "create",
-          "description": "Create a focused thread component that renders message bubbles, timestamps, and a send box; calls backend sendMessage and invalidates/refetches the message query on success. Ensure all UI labels are in English. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/chat/ConversationList.tsx",
-          "operation": "create",
-          "description": "Create a conversation list component that shows partners and last message preview. (If backend does not provide an explicit thread list, derive from known partners visited/search-initiated and/or cached message queries.) Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/queries/useChat.ts",
-          "operation": "create",
-          "description": "Add React Query hooks to fetch getMessages(partner) and sendMessage(recipient, content). Implement polling via query options (no WebSockets) and make sure queries are disabled until actor/auth is ready. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
           "operation": "modify",
-          "description": "Wire Chat routes (chat list and chat thread route) into the app router so selecting a user from Search opens the correct chat view."
+          "description": "Refactor RootComponent gating so the LoginScreen renders immediately for logged-out users, and authenticated rendering (AppLayout/ProfileSetupModal) is guarded by a dedicated initialization state that can surface an English error UI + retry instead of an infinite spinner/blank screen."
+        },
+        {
+          "path": "frontend/src/components/startup/AppInitGate.tsx",
+          "operation": "create",
+          "description": "Create an app initialization gate component that coordinates actor readiness and profile loading, prevents rendering authenticated routes until dependencies are ready, and exposes a retry action that re-attempts initialization via React Query invalidation (no direct edits to forbidden hooks)."
+        },
+        {
+          "path": "frontend/src/components/startup/StartupErrorScreen.tsx",
+          "operation": "create",
+          "description": "Create a simple English error-state component (title, short description, optional technical details in a collapsible area, and a Retry button) used when actor/profile initialization fails (avoid any dependency on forbidden hook edits)."
         }
       ]
     },
     {
-      "id": "REQ-4",
-      "summary": "Implement posts feed with create-post form (caption + optional image upload), persistent storage, and newest-first rendering via React Query.",
+      "id": "REQ-23",
+      "summary": "Harden frontend startup so missing optional secrets do not block rendering, and initialization failures are handled gracefully with an English error and retry while keeping Login accessible.",
       "acceptanceCriteria": [
-        "User can create a post with caption and optional image.",
-        "Created posts appear in the main feed for all users.",
-        "Post images persist across refresh and across logins.",
-        "Backend provides methods to create/list posts; feed loads via React Query."
+        "When no admin token/secret is present, the app still loads and authentication flows work (no initialization-related crash or infinite spinner).",
+        "When initialization fails (simulated by forcing an error), the app shows an English error UI with a retry button that re-attempts initialization.",
+        "The login screen remains accessible even if anonymous actor creation/initialization fails (i.e., the user is not blocked from seeing the login UI)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/FeedPage.tsx",
+          "path": "frontend/src/components/startup/useStartupRetry.ts",
           "operation": "create",
-          "description": "Create the main feed page that shows a create-post composer (caption + optional image) and a posts list ordered newest-first. Use React Query to load backend getPosts and mutation to createPost; after create, invalidate posts query. For images, use blob-storage ExternalBlob and render via getDirectURL when present. Verify the component's usage instructions before implementing."
+          "description": "Add a small hook that provides a stable retry callback to re-attempt startup by invalidating/refetching React Query caches related to actor/profile queries (without modifying frontend/src/hooks/useActor.ts or other forbidden hook files)."
         },
         {
-          "path": "frontend/src/components/posts/CreatePostCard.tsx",
-          "operation": "create",
-          "description": "Create a post composer card with caption input, image file picker, upload progress (via ExternalBlob.withUploadProgress), and submit button. Ensure English labels and clear validation messaging. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/posts/PostCard.tsx",
-          "operation": "create",
-          "description": "Create a post card UI showing author info, caption, timestamp, and optional image (rendered from ExternalBlob direct URL). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/queries/usePosts.ts",
-          "operation": "create",
-          "description": "Add React Query hooks for getPosts and createPost, including optimistic/loading states and invalidation. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
+          "path": "frontend/src/pages/LoginScreen.tsx",
           "operation": "modify",
-          "description": "Register the Feed route as a primary navigation destination."
+          "description": "Ensure the login screen remains fully usable regardless of background initialization status by rendering any startup error messaging non-blockingly (English text only) and keeping the Internet Identity sign-in button accessible. Verify the component's usage instructions before implementing (shadcn-ui Button/Card usage)."
+        },
+        {
+          "path": "frontend/src/utils/urlParams.ts",
+          "operation": "modify",
+          "description": "Add non-breaking utilities to support startup hardening (e.g., a safe helper for checking presence of optional secrets and/or a documented, explicit 'optional secret' getter) so higher-level code can avoid treating missing secrets as fatal; do not change existing exported behavior in a way that would break current routes."
         }
       ]
     },
     {
-      "id": "REQ-5",
-      "summary": "Implement stories creation and viewer UI grouped by author, with persistent storage and browsing.",
+      "id": "REQ-24",
+      "summary": "Document how to produce an Android APK using the existing Capacitor Android setup, and store the generated artifact in a clearly documented repo location.",
       "acceptanceCriteria": [
-        "User can create a story with optional image and text.",
-        "Stories can be browsed in a viewer UI grouped by author.",
-        "Stories persist across refresh and across logins.",
-        "Backend provides methods to create/list stories."
+        "A successfully built APK (debug or release) is generated via documented steps in this repo and can be installed on an Android device/emulator.",
+        "The repo documentation clearly states the exact output path(s) where the generated APK can be found after the build completes.",
+        "The Android build uses the existing Capacitor configuration and builds the current web app version (no missing assets / white screen on launch)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/StoriesPage.tsx",
-          "operation": "create",
-          "description": "Create a Stories section with: (a) create-story form (short text + optional image) and (b) a stories rail grouped by author that opens a viewer. Load data via backend getActiveStories and create via createStory; render images using ExternalBlob.getDirectURL. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/stories/StoriesViewer.tsx",
-          "operation": "create",
-          "description": "Create a viewer modal/page that lets the user browse stories grouped by author, with next/prev navigation and clear English controls. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/queries/useStories.ts",
-          "operation": "create",
-          "description": "Add React Query hooks for getActiveStories/createStory and provide grouped-by-author selectors for the UI. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
+          "path": "frontend/ANDROID_APK.md",
           "operation": "modify",
-          "description": "Register Stories route and wire it into main navigation."
+          "description": "Extend the existing Capacitor Android build guide to clearly specify: (1) the exact Gradle output paths for debug/release APKs, (2) the repo location to place the final downloadable APK (static public path), and (3) a quick verification checklist to avoid Android 'white screen' (correct webDir build, capacitor sync, and asset presence)."
+        },
+        {
+          "path": "frontend/public/downloads/.gitkeep",
+          "operation": "create",
+          "description": "Add a tracked downloads directory placeholder under the static public path to establish the documented location for publishing the built APK for web download."
         }
       ]
     },
     {
-      "id": "REQ-6",
-      "summary": "Implement reels MVP: create reel with caption/title and video upload or link fallback; list and viewer; persistent across sessions.",
+      "id": "REQ-25",
+      "summary": "Serve the Android APK as a static frontend asset and expose an English-labeled 'Download Android APK' link from a screen accessible when logged out.",
       "acceptanceCriteria": [
-        "User can create a reel with caption/title.",
-        "Reels list renders and a reel can be opened in a viewer.",
-        "Reels persist across refresh and across logins.",
-        "If upload is supported, uploaded media plays back; if link-only fallback is used, the UI clearly supports entering and opening the link."
+        "The APK file is placed under a static public path (e.g., within frontend/public) so it is downloadable from the deployed web site.",
+        "The UI displays an English 'Download Android APK' link that downloads the APK when clicked.",
+        "The download link remains visible/accessible even if the user is not logged in."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/ReelsPage.tsx",
+          "path": "frontend/public/downloads/caffeine-social.apk",
           "operation": "create",
-          "description": "Create a Reels section with a create-reel form and a reels list. Support either: (a) uploading a small video via blob-storage ExternalBlob or (b) link-only fallback input if upload is constrained; keep the UI explicit about which mode is used. Load via backend getReels and create via createReel. Verify the component's usage instructions before implementing."
+          "description": "Add the generated Android APK artifact to a stable static public location so it can be downloaded from the deployed site (this file should be produced by the documented build steps and placed here for release)."
         },
         {
-          "path": "frontend/src/components/reels/ReelViewer.tsx",
-          "operation": "create",
-          "description": "Create a reel viewer that can play an uploaded video (using ExternalBlob.getDirectURL in a video element) or open a provided link. Ensure English labels and clear error states. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/queries/useReels.ts",
-          "operation": "create",
-          "description": "Add React Query hooks for getReels/createReel; include invalidation and loading states; keep upload progress surfaced when video upload is used. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
+          "path": "frontend/src/pages/LoginScreen.tsx",
           "operation": "modify",
-          "description": "Register Reels route and wire it into main navigation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Add a persistent top header with left-aligned logo and exact required ownership text; ensure all UI text is English.",
-      "acceptanceCriteria": [
-        "Header is visible on all main pages/sections.",
-        "Logo is on the left; the required text appears exactly as provided.",
-        "No non-English UI labels are introduced."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/layout/AppHeader.tsx",
-          "operation": "create",
-          "description": "Create a top application header component that is shown across all routes/sections. Include a left-aligned logo image (from frontend/public/assets/generated) and the exact text: \"owner Piyush Singh for Yash Jay Anush Harsh Abhay\". Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/layout/AppLayout.tsx",
-          "operation": "create",
-          "description": "Create a layout wrapper that composes AppHeader + main navigation + routed content, used by App/router so the header is always visible. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wrap all authenticated pages with AppLayout so the header appears across the entire app; ensure any existing labels are English-only."
-        }
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "summary": "Add a Games section with at least five distinct 2D mini-games running fully in-browser (no external services).",
-      "acceptanceCriteria": [
-        "Games section exists and is reachable from main navigation.",
-        "At least five different game types are playable.",
-        "Each game has a reset/restart control and basic instructions in English."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/GamesPage.tsx",
-          "operation": "create",
-          "description": "Create a Games section page that lists and launches at least five 2D mini-games: Tic-Tac-Toe, Memory Match, Snake, 2048, and a simple Quiz. Each game must include English instructions and a reset/restart control."
-        },
-        {
-          "path": "frontend/src/games/tic-tac-toe/TicTacToe.tsx",
-          "operation": "create",
-          "description": "Implement Tic-Tac-Toe mini-game component (2D), including reset and basic English instructions."
-        },
-        {
-          "path": "frontend/src/games/memory-match/MemoryMatch.tsx",
-          "operation": "create",
-          "description": "Implement Memory Match mini-game component (2D), including reset and basic English instructions."
-        },
-        {
-          "path": "frontend/src/games/snake/Snake.tsx",
-          "operation": "create",
-          "description": "Implement Snake mini-game component (2D) using canvas or div grid, including restart, controls help in English, and no external services."
-        },
-        {
-          "path": "frontend/src/games/2048/Game2048.tsx",
-          "operation": "create",
-          "description": "Implement 2048 mini-game component (2D), including restart and basic English instructions."
-        },
-        {
-          "path": "frontend/src/games/quiz/Quiz.tsx",
-          "operation": "create",
-          "description": "Implement a simple offline Quiz mini-game component (2D) with a small in-code question bank, scoring, and restart; all labels in English."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
-          "operation": "modify",
-          "description": "Register Games route and wire it into main navigation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "summary": "Add an offline-ready Music section that plays bundled audio tracks with metadata and tag filtering (e.g., India/Pakistan).",
-      "acceptanceCriteria": [
-        "Music section exists with a list/grid of tracks and a player (play/pause/seek/next/prev).",
-        "Tracks are loaded from static assets bundled with the frontend (no external streaming).",
-        "Tracks can be filtered by tags such as India and Pakistan."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/MusicPage.tsx",
-          "operation": "create",
-          "description": "Create a Music section that loads a local track list (metadata) and provides browsing, tag filtering (India/Pakistan), and playback controls (play/pause/seek/next/prev) using the HTML audio element."
-        },
-        {
-          "path": "frontend/src/components/music/MusicPlayer.tsx",
-          "operation": "create",
-          "description": "Create a reusable music player component with play/pause, seek bar, next/prev, and current track info. Ensure English labels and keyboard accessibility basics."
-        },
-        {
-          "path": "frontend/src/music/library.ts",
-          "operation": "create",
-          "description": "Add local, bundled music metadata (title, artist, tags like India/Pakistan) pointing to static audio asset paths under frontend/public. Ensure tracks are properly licensed/demo (no copyrighted commercial songs)."
-        },
-        {
-          "path": "frontend/public/assets/audio/demo-india-1.dim_0x0.ogg",
-          "operation": "create",
-          "description": "Add a properly licensed/demo offline audio track asset for the India tag (placeholder filename includes required .dim_ metadata convention for consistency in the project)."
-        },
-        {
-          "path": "frontend/public/assets/audio/demo-pakistan-1.dim_0x0.ogg",
-          "operation": "create",
-          "description": "Add a properly licensed/demo offline audio track asset for the Pakistan tag (placeholder filename includes required .dim_ metadata convention for consistency in the project)."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
-          "operation": "modify",
-          "description": "Register Music route and wire it into main navigation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "summary": "Add Study Tools section with a whiteboard (draw/erase/colors/export PNG) and a PPT-like slide tool (text blocks, reorder, present).",
-      "acceptanceCriteria": [
-        "Whiteboard supports draw/erase, color selection, clear, and export to PNG.",
-        "Slide tool supports creating multiple slides, adding/editing text, reordering slides, and a presentation/preview mode.",
-        "All controls have English labels."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/StudyToolsPage.tsx",
-          "operation": "create",
-          "description": "Create a Study Tools section page with two tabs/subsections: Whiteboard and Slides. Ensure all controls are English-labeled and usable."
-        },
-        {
-          "path": "frontend/src/components/study/Whiteboard.tsx",
-          "operation": "create",
-          "description": "Implement a canvas-based whiteboard with freehand drawing, color selection, eraser, clear board, and export to PNG (download)."
-        },
-        {
-          "path": "frontend/src/components/study/SlidesTool.tsx",
-          "operation": "create",
-          "description": "Implement a simple PPT-like slide tool: create slides, add/edit text blocks, reorder slides, and provide a present/preview mode."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
-          "operation": "modify",
-          "description": "Register Study Tools route and wire it into main navigation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "summary": "Add AI Tools section with local/offline AI Writing helpers and a local canvas-based Image Generator that exports PNG; no third-party AI APIs.",
-      "acceptanceCriteria": [
-        "AI Writing tool can generate text output from user prompts using local templates/heuristics and allow copy/download.",
-        "Image Generator can generate an image locally and export to PNG.",
-        "No calls to external AI/LLM/image-generation services are present."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AiToolsPage.tsx",
-          "operation": "create",
-          "description": "Create an AI Tools section page containing the AI Writing tool, Image Generator tool, and the local chatbot entry point. Ensure no network calls to third-party AI services exist."
-        },
-        {
-          "path": "frontend/src/components/ai/AiWritingTool.tsx",
-          "operation": "create",
-          "description": "Implement an on-device AI Writing helper using templates/heuristics (tone transforms, structured drafting, summarization-style heuristics). Provide copy and download (text file) actions with English labels."
-        },
-        {
-          "path": "frontend/src/components/ai/ImageGenerator.tsx",
-          "operation": "create",
-          "description": "Implement a local canvas-based image generator (patterns/gradients/shapes composition) with controls and export to PNG download. No external services."
-        },
-        {
-          "path": "frontend/src/routes.tsx",
-          "operation": "modify",
-          "description": "Register AI Tools route and wire it into main navigation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "summary": "Add a small local rules-based chatbot in the AI Tools section with FAQ-style answers and navigation shortcuts.",
-      "acceptanceCriteria": [
-        "Chatbot UI supports user messages and assistant replies.",
-        "Chatbot operates fully locally (no external AI service).",
-        "Chatbot can answer basic app-usage questions and provide shortcuts/links to sections."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ai/LocalChatbot.tsx",
-          "operation": "create",
-          "description": "Implement a lightweight, rules-based chatbot UI (local only) that responds to common questions about using the app and supports command shortcuts (e.g., 'go to games', 'open music') by linking/navigating to existing routes."
-        },
-        {
-          "path": "frontend/src/ai/chatbotRules.ts",
-          "operation": "create",
-          "description": "Define the chatbot's local intents/FAQ rules and command-to-route mappings used by LocalChatbot. Ensure all responses are in English."
-        },
-        {
-          "path": "frontend/src/pages/AiToolsPage.tsx",
-          "operation": "modify",
-          "description": "Wire the LocalChatbot into the AI Tools page and ensure it can navigate to existing sections via the app router."
-        }
-      ]
-    },
-    {
-      "id": "REQ-14",
-      "summary": "Create and apply a coherent visual theme across the app (no blue/purple primary theme).",
-      "acceptanceCriteria": [
-        "App uses a consistent theme across pages (navigation, cards, buttons, inputs).",
-        "Theme does not primarily rely on blue/purple as the main palette.",
-        "UI remains readable and accessible with clear contrast and hierarchy."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "create",
-          "description": "Define global theme tokens/styles (Tailwind CSS variables where applicable) using a distinctive palette that is not primarily blue/purple; ensure consistent typography, spacing, and readable contrast across components."
-        },
-        {
-          "path": "frontend/tailwind.config.js",
-          "operation": "modify",
-          "description": "Adjust theme extension and/or CSS variable usage to align with the chosen non-blue/purple primary palette and consistent styling across the app."
-        },
-        {
-          "path": "frontend/src/components/layout/AppLayout.tsx",
-          "operation": "modify",
-          "description": "Apply consistent layout primitives (page containers, section headers, card styling) so all sections share the same visual system (spacing, surfaces, borders, and typography)."
-        }
-      ]
-    },
-    {
-      "id": "REQ-15",
-      "summary": "Integrate generated brand images as static assets under frontend/public/assets/generated and load the header logo from there.",
-      "acceptanceCriteria": [
-        "Generated images are stored under frontend/public/assets/generated.",
-        "Header logo references a file under frontend/public/assets/generated and renders correctly."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/caffeine-social-logo.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated minimal flat logo mark asset at the exact required path for static serving."
-        },
-        {
-          "path": "frontend/public/assets/generated/caffeine-social-logo-wide.dim_800x200.png",
-          "operation": "create",
-          "description": "Add the generated wide header logo lockup asset at the exact required path for the app header."
-        },
-        {
-          "path": "frontend/public/assets/generated/caffeine-social-favicon.dim_64x64.png",
-          "operation": "create",
-          "description": "Add the generated favicon-style icon asset at the exact required path (even if not yet wired into HTML, it must exist under generated assets)."
+          "description": "Add an English 'Download Android APK' link/button on the Login screen that points to the static public APK path and triggers a direct download; keep it visible for logged-out users. Verify the component's usage instructions before implementing (shadcn-ui Button/Card usage)."
         },
         {
           "path": "frontend/src/components/layout/AppHeader.tsx",
           "operation": "modify",
-          "description": "Wire the header logo image source to frontend/public/assets/generated/caffeine-social-logo-wide.dim_800x200.png and ensure it renders left-aligned alongside the required header text."
+          "description": "Optionally add a lightweight, always-English 'Download Android APK' link in the header area that is visible when logged out is not applicable here; ensure it does not introduce new routes and does not interfere with existing logout behavior. Verify the component's usage instructions before implementing (shadcn-ui Button usage if used)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Update Android APK documentation with prerequisites, exact build commands, how to publish the APK to the static download path, and verification steps for both web and Android startup.",
+      "acceptanceCriteria": [
+        "Documentation provides step-by-step commands to build the web app, sync Capacitor, and build the Android APK.",
+        "Documentation explains how to publish the APK for web download (static file placement + resulting URL).",
+        "Documentation includes a verification checklist for both web load and Android app load (ensuring the app is not stuck loading)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/ANDROID_APK.md",
+          "operation": "modify",
+          "description": "Add explicit commands for: install deps, web build to match Capacitor webDir, Capacitor sync, Android build, plus exact copy/move instructions to place the produced APK into frontend/public/downloads/caffeine-social.apk and a checklist to verify no white screen (Android) and no infinite spinner/blank screen (web)."
+        },
+        {
+          "path": "frontend/capacitor.config.ts",
+          "operation": "modify",
+          "description": "Align documentation and configuration assumptions by verifying the configured webDir matches the build output used by the documented commands, and update config comments if needed to reduce the risk of Android loading a stale/missing dist directory."
         }
       ]
     }

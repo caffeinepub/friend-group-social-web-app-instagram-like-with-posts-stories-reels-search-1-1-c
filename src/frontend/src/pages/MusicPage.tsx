@@ -83,17 +83,18 @@ export default function MusicPage() {
   };
 
   return (
-    <div className="container max-w-4xl py-8 space-y-6">
+    <div className="container max-w-4xl py-4 md:py-8 px-3 md:px-4 space-y-4 md:space-y-6">
       <Card>
-        <CardHeader>
-          <CardTitle>Music Library</CardTitle>
+        <CardHeader className="px-4 md:px-6 py-4 md:py-6">
+          <CardTitle className="text-lg md:text-xl">Music Library</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-2">
+        <CardContent className="px-4 md:px-6 pb-4 md:pb-6 space-y-4">
+          <div className="flex flex-wrap gap-2">
             <Button 
               variant={filter === 'all' ? 'default' : 'outline'}
               onClick={() => setFilter('all')}
               size="sm"
+              className="min-h-[44px] md:min-h-0"
             >
               All
             </Button>
@@ -101,6 +102,7 @@ export default function MusicPage() {
               variant={filter === 'India' ? 'default' : 'outline'}
               onClick={() => setFilter('India')}
               size="sm"
+              className="min-h-[44px] md:min-h-0"
             >
               India
             </Button>
@@ -108,6 +110,7 @@ export default function MusicPage() {
               variant={filter === 'Pakistan' ? 'default' : 'outline'}
               onClick={() => setFilter('Pakistan')}
               size="sm"
+              className="min-h-[44px] md:min-h-0"
             >
               Pakistan
             </Button>
@@ -118,14 +121,16 @@ export default function MusicPage() {
               <div
                 key={track.id}
                 onClick={() => playTrack(track)}
-                className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                className={`p-3 rounded-lg border cursor-pointer transition-colors min-h-[60px] flex items-center ${
                   currentTrack?.id === track.id
                     ? 'bg-primary/10 border-primary'
                     : 'bg-card hover:bg-accent'
                 }`}
               >
-                <p className="font-semibold">{track.title}</p>
-                <p className="text-sm text-muted-foreground">{track.artist}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-sm md:text-base truncate">{track.title}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground truncate">{track.artist}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -134,10 +139,10 @@ export default function MusicPage() {
 
       {currentTrack && (
         <Card>
-          <CardContent className="pt-6 space-y-4">
+          <CardContent className="pt-4 md:pt-6 pb-4 md:pb-6 px-4 md:px-6 space-y-4">
             <div className="text-center">
-              <p className="font-semibold text-lg">{currentTrack.title}</p>
-              <p className="text-sm text-muted-foreground">{currentTrack.artist}</p>
+              <p className="font-semibold text-base md:text-lg truncate">{currentTrack.title}</p>
+              <p className="text-xs md:text-sm text-muted-foreground truncate">{currentTrack.artist}</p>
             </div>
 
             <div className="space-y-2">
@@ -153,14 +158,14 @@ export default function MusicPage() {
               </div>
             </div>
 
-            <div className="flex justify-center gap-4">
-              <Button variant="outline" size="icon" onClick={playPrev}>
+            <div className="flex justify-center gap-3 md:gap-4">
+              <Button variant="outline" size="icon" onClick={playPrev} className="min-w-[44px] min-h-[44px]">
                 <SkipBack className="w-4 h-4" />
               </Button>
-              <Button size="icon" onClick={togglePlay}>
+              <Button size="icon" onClick={togglePlay} className="min-w-[44px] min-h-[44px]">
                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               </Button>
-              <Button variant="outline" size="icon" onClick={playNext}>
+              <Button variant="outline" size="icon" onClick={playNext} className="min-w-[44px] min-h-[44px]">
                 <SkipForward className="w-4 h-4" />
               </Button>
             </div>

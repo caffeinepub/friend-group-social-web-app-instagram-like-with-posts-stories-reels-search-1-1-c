@@ -1,90 +1,51 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T09:16:31.662Z",
-  "summary": "Diff adds a single Motoko backend actor with data models for profiles/posts/stories/reels/messages and adds substantial frontend structure: authenticated app routing/layout with a global header + navigation, AI Tools (writing tool, local image generator, local rules-based chatbot), Study Tools (whiteboard + slides), and multiple browser mini-games (Tic-Tac-Toe, Memory Match, Snake, 2048, Quiz). Some requirements cannot be verified due to many omitted/truncated added files. Clear gaps are avatar upload UI for profiles and the slides tool not showing support for multiple text blocks per slide.",
+  "generatedAt": "2026-02-14T10:43:42.892Z",
+  "summary": "The diff adds a startup initialization gate with a retryable English error screen, updates App routing to show Login immediately for logged-out users, and adds an APK file under frontend/public with a visible 'Download Android APK' button on the Login screen. However, the required Android build/documentation deliverables (REQ-24/REQ-26) are not evidenced in the diff, and hardening around missing optional admin secrets (REQ-23) is not explicitly shown beyond generic startup gating/retry UX.",
   "missing_requirements": [
     {
-      "id": "REQ-1",
-      "requirement": "Support optional avatar image in the in-app user profile, including a way for the user to set/upload it after first login.",
-      "reason": "Backend profile type includes an avatar field, but the shown profile setup UI always submits `avatar: undefined` and provides no avatar upload/select control, so users cannot set an avatar from the UI based on available evidence.",
+      "id": "REQ-23",
+      "requirement": "Harden frontend startup and actor initialization so access-control/initialization calls do not block rendering when optional secrets are missing, and failures are handled gracefully with an actionable English error message.",
+      "reason": "While a generic AppInitGate + StartupErrorScreen with Retry is added, the diff summary does not show any change specifically addressing 'optional secrets' (e.g., missing admin token/secret) to ensure the app still loads without initialization-related crashes/spinners. No evidence indicates conditional logic around missing secrets or removal of secret-dependent blocking calls.",
       "evidence": [
-        "frontend/src/components/profile/ProfileSetupModal.tsx",
-        "backend/main.mo"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "requirement": "Slide tool supports adding text blocks (not just a single text area per slide) and editing them.",
-      "reason": "The provided Slides tool structure indicates each slide contains a single `content: string` edited as one textarea; no evidence of multiple text blocks per slide is shown in the diff snippet.",
-      "evidence": [
-        "frontend/src/components/study/SlidesTool.tsx"
-      ]
-    }
-  ],
-  "hallucinated_features": [
-    {
-      "description": "Role/permission-based authorization mixin (AccessControl + MixinAuthorization) used to gate profile access.",
-      "reason": "BuildRequest requires basic authorization, but does not request adding/using a specific mixin-based access control framework; this is additional functionality/implementation detail beyond the requested feature set.",
-      "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "description": "ThemeProvider via `next-themes` (system theme support).",
-      "reason": "BuildRequest asks for a coherent visual theme and explicitly forbids blue/purple, but does not request system theme toggling/provider behavior; this is extra behavior beyond requirements.",
-      "evidence": [
+        "frontend/src/components/startup/AppInitGate.tsx",
+        "frontend/src/components/startup/StartupErrorScreen.tsx",
         "frontend/src/App.tsx"
       ]
+    },
+    {
+      "id": "REQ-24",
+      "requirement": "Produce an Android APK build artifact using the existing Capacitor Android setup and include it in deliverables in a clearly documented location in the repo.",
+      "reason": "An APK file is added under frontend/public/downloads, and capacitor.config.ts is present/modified, but the diff does not include documentation stating build steps and the exact output path(s) where the generated APK can be found after building via Capacitor/Gradle.",
+      "evidence": [
+        "frontend/public/downloads/caffeine-social.apk",
+        "frontend/capacitor.config.ts"
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "requirement": "Update/extend Android APK documentation to include prerequisites, exact build commands, how to copy/place the built APK into the static public download path, and how to verify the APK opens without a white screen.",
+      "reason": "No documentation file changes (e.g., README) are shown in the diff summary. Therefore the required step-by-step build/sync commands, publishing steps (copy into frontend/public/downloads + resulting URL), and verification checklist are not evidenced.",
+      "evidence": [
+        "frontend/public/downloads/caffeine-social.apk",
+        "frontend/public/downloads/.gitkeep"
+      ]
     }
   ],
-  "confidence": 0.62,
+  "hallucinated_features": [],
+  "confidence": 0.68,
   "changed_files": [
-    "all_files_summary.json",
     "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.css",
-    "frontend/index.html",
+    "frontend/capacitor.config.ts",
+    "frontend/public/downloads/.gitkeep",
+    "frontend/public/downloads/caffeine-social.apk",
     "frontend/src/App.tsx",
-    "frontend/src/ai/chatbotRules.ts",
-    "frontend/src/components/ai/AiWritingTool.tsx",
-    "frontend/src/components/ai/ImageGenerator.tsx",
-    "frontend/src/components/ai/LocalChatbot.tsx",
-    "frontend/src/components/layout/AppHeader.tsx",
-    "frontend/src/components/layout/AppLayout.tsx",
-    "frontend/src/components/layout/AppNavigation.tsx",
-    "frontend/src/components/posts/PostCard.tsx",
-    "frontend/src/components/profile/ProfileSetupModal.tsx",
-    "frontend/src/components/study/SlidesTool.tsx",
-    "frontend/src/components/study/Whiteboard.tsx",
-    "frontend/src/games/2048/Game2048.tsx",
-    "frontend/src/games/memory-match/MemoryMatch.tsx",
-    "frontend/src/games/quiz/Quiz.tsx",
-    "frontend/src/games/snake/Snake.tsx",
-    "frontend/src/games/tic-tac-toe/TicTacToe.tsx",
-    "frontend/src/hooks/queries/useChat.ts",
-    "frontend/src/hooks/queries/useCurrentUserProfile.ts",
-    "frontend/src/hooks/queries/usePosts.ts",
-    "frontend/src/hooks/queries/useReels.ts",
-    "frontend/src/hooks/queries/useStories.ts",
-    "frontend/src/hooks/queries/useUserSearch.ts",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/index.css",
-    "frontend/src/main.tsx",
-    "frontend/src/music/library.ts",
-    "frontend/src/pages/AiToolsPage.tsx",
-    "frontend/src/pages/ChatPage.tsx",
-    "frontend/src/pages/FeedPage.tsx",
-    "frontend/src/pages/GamesPage.tsx",
+    "frontend/src/components/startup/AppInitGate.tsx",
+    "frontend/src/components/startup/StartupErrorScreen.tsx",
+    "frontend/src/components/startup/useStartupRetry.ts",
     "frontend/src/pages/LoginScreen.tsx",
-    "frontend/src/pages/MusicPage.tsx",
-    "frontend/src/pages/ReelsPage.tsx",
-    "frontend/src/pages/SearchPage.tsx",
-    "frontend/src/pages/StoriesPage.tsx",
-    "frontend/src/pages/StudyToolsPage.tsx",
-    "frontend/src/utils/urlParams.ts",
-    "frontend/tailwind.config.js",
     "project_state.json"
   ]
 }

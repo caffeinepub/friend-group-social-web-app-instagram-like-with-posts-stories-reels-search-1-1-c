@@ -15,34 +15,35 @@ import GamesPage from './pages/GamesPage';
 import MusicPage from './pages/MusicPage';
 import StudyToolsPage from './pages/StudyToolsPage';
 import AiToolsPage from './pages/AiToolsPage';
+import AppInitGate from './components/startup/AppInitGate';
 
 function RootComponent() {
   const { identity, isInitializing } = useInternetIdentity();
-  const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
-  
   const isAuthenticated = !!identity;
-  const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;
 
-  if (isInitializing || (isAuthenticated && profileLoading)) {
+  // Show login screen immediately for logged-out users
+  if (!isAuthenticated && !isInitializing) {
+    return <LoginScreen />;
+  }
+
+  // Show minimal loading only during initial identity check
+  if (isInitializing) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="text-center space-y-4">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">Initializing...</p>
         </div>
       </div>
     );
   }
 
-  if (!isAuthenticated) {
-    return <LoginScreen />;
-  }
-
-  if (showProfileSetup) {
-    return <ProfileSetupModal />;
-  }
-
-  return <AppLayout />;
+  // For authenticated users, use the init gate to handle actor/profile loading
+  return (
+    <AppInitGate>
+      <AppLayout />
+    </AppInitGate>
+  );
 }
 
 const rootRoute = createRootRoute({

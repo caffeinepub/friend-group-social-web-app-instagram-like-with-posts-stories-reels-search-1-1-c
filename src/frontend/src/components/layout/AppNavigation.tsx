@@ -19,7 +19,7 @@ export default function AppNavigation() {
   const currentPath = routerState.location.pathname;
 
   return (
-    <nav className="w-64 border-r bg-card/50 p-4 space-y-2 overflow-y-auto">
+    <nav className="hidden md:block w-64 border-r bg-card/50 p-4 space-y-2 overflow-y-auto">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = currentPath === item.path || (currentPath === '/' && item.path === '/feed');

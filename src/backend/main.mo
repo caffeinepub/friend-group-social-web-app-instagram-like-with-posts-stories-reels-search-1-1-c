@@ -1,14 +1,13 @@
 import Time "mo:core/Time";
 import Text "mo:core/Text";
 import Map "mo:core/Map";
-import Array "mo:core/Array";
-import Iter "mo:core/Iter";
 import Order "mo:core/Order";
+import Iter "mo:core/Iter";
 import List "mo:core/List";
-import Timer "mo:core/Timer";
-import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
+import Array "mo:core/Array";
 import MixinStorage "blob-storage/Mixin";
+import Principal "mo:core/Principal";
 import Storage "blob-storage/Storage";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
@@ -133,7 +132,7 @@ actor {
   let messages = Map.empty<MessageId, Message.Data>();
   let reels = Map.empty<ReelId, Reel.Data>();
 
-  // User Profile Management (Required by frontend)
+  // User Profiles (Required functionality)
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can access profiles");
@@ -183,6 +182,12 @@ actor {
       avatar = profile.avatar;
     };
     profiles.add(caller, profileData);
+  };
+
+  // Helper (initial state for empty message array)
+  func emptyMessageArray() : [Message.Data] {
+    let emptyList = List.empty<Message.Data>();
+    emptyList.toArray();
   };
 
   // Posts
@@ -314,7 +319,6 @@ actor {
     filteredIter.toArray().sort(Message.compareByTimestamp);
   };
 
-  // Reels
   public query ({ caller }) func getReels() : async [Reel.Data] {
     if (not AccessControl.hasPermission(accessControlState, caller, #user)) {
       Runtime.trap("Unauthorized: Only users can view reels");

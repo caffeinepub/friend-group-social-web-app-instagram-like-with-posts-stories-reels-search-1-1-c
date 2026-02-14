@@ -1,17 +1,19 @@
 import { Outlet } from '@tanstack/react-router';
 import AppHeader from './AppHeader';
 import AppNavigation from './AppNavigation';
+import BottomTabBar from './BottomTabBar';
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col mobile-layout">
       <AppHeader />
-      <div className="flex-1 flex">
+      <div className="flex-1 flex overflow-hidden">
         <AppNavigation />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto pb-safe-bottom">
           <Outlet />
         </main>
       </div>
+      <BottomTabBar />
     </div>
   );
 }

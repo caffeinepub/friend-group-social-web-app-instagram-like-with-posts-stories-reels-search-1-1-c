@@ -1,23 +1,27 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import AiWritingTool from '../components/ai/AiWritingTool';
 import ImageGenerator from '../components/ai/ImageGenerator';
 import LocalChatbot from '../components/ai/LocalChatbot';
 
 export default function AiToolsPage() {
   return (
-    <div className="container max-w-6xl py-8">
+    <div className="container max-w-6xl py-4 md:py-8 px-3 md:px-4">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl">AI Tools</CardTitle>
+        <CardHeader className="px-4 md:px-6 py-4 md:py-6">
+          <CardTitle className="text-xl md:text-3xl">AI Tools</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
           <Tabs defaultValue="writing">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="writing">AI Writing</TabsTrigger>
-              <TabsTrigger value="image">Image Generator</TabsTrigger>
-              <TabsTrigger value="chatbot">Chatbot</TabsTrigger>
-            </TabsList>
+            <ScrollArea className="w-full whitespace-nowrap">
+              <TabsList className="inline-flex w-auto md:grid md:w-full md:grid-cols-3">
+                <TabsTrigger value="writing" className="px-4 md:px-6">AI Writing</TabsTrigger>
+                <TabsTrigger value="image" className="px-4 md:px-6">Image Generator</TabsTrigger>
+                <TabsTrigger value="chatbot" className="px-4 md:px-6">Chatbot</TabsTrigger>
+              </TabsList>
+              <ScrollBar orientation="horizontal" className="md:hidden" />
+            </ScrollArea>
             <TabsContent value="writing">
               <AiWritingTool />
             </TabsContent>

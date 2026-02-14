@@ -1,15 +1,18 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 9,
   "summary": "Build an Instagram-like social app (web + Android APK) for a friend group with user accounts, account search, 1:1 chat, posts, stories, reels, persistent storage of uploaded content and messages, plus extra sections for games, music, study whiteboard/PPT tool, AI image generation, AI writing, and a small chatbot, with a custom branded header and logo.",
   "architectural_notes": [
     "App must persist user-uploaded media (posts/stories/reels) and chat history so it reappears after re-login.",
     "Requires authentication + user identity system and storage backend for media and messages.",
-    "Deliver both web deployment and Android APK build pipeline as part of deliverables."
+    "Deliver both web deployment and Android APK build pipeline as part of deliverables.",
+    "Add mobile-first responsive design and touch-friendly UI patterns so the web app behaves like a mobile app on phones (navigation, layouts, tap targets).",
+    "Header must display the exact user-requested creator line: \"created by Piyush Singh for Jay Yash Anus Sohan Harsh Abhay\" (spelling and spacing as specified)."
   ],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Minimal flat logo mark (caffeine-social-logo.dim_256x256.png)\n- Wide header logo lockup with textless icon variant (caffeine-social-logo-wide.dim_800x200.png)\n- App favicon-style icon (caffeine-social-favicon.dim_64x64.png)",
+  "known_issues": [
+    "App is not loading for the user (needs investigation and fix)."
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-add-authentication-using-internet-identity-and-create-an-in-app-user-profile-model-stored-in-the-motoko-canister-display-name-username-handle-optional-bio-optional-avatar-image-on-first-login-prompt-the-user-to-create-complete-their-profile-on-subsequent-logins-load-their-existing-profile",
@@ -122,6 +125,94 @@
         "REQ-15"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-refactor-the-main-authenticated-layout-to-be-mobile-first-on-small-screens-replace-the-left-sidebar-navigation-with-a-fixed-bottom-tab-bar-and-ensure-the-content-area-uses-the-full-width",
+      "title": "Refactor the main authenticated layout to be mobile-first: on small screens, replace the left sidebar navigation with a fixed bottom tab bar and ensure the content area uses the full width.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-header-and-top-level-spacing-mobile-optimized-so-the-app-feels-like-a-mobile-application-compact-header-touch-friendly-controls-and-safe-area-handling",
+      "title": "Make the header and top-level spacing mobile-optimized so the app feels like a mobile application (compact header, touch-friendly controls, and safe-area handling).",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-key-pages-components-to-be-responsive-and-mobile-friendly-forms-tabs-cards-media-areas-by-adjusting-layouts-typography-scale-and-spacing-for-small-screens-without-removing-existing-functionality",
+      "title": "Update key pages/components to be responsive and mobile-friendly (forms, tabs, cards, media areas) by adjusting layouts, typography scale, and spacing for small screens without removing existing functionality.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-progressive-web-app-pwa-support-so-the-site-can-be-installed-and-launched-like-a-mobile-app-manifest-appropriate-meta-link-tags-using-existing-generated-icons-where-possible",
+      "title": "Add basic Progressive Web App (PWA) support so the site can be installed and launched like a mobile app (manifest + appropriate meta/link tags) using existing generated icons where possible.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-top-application-header-to-also-display-the-exact-additional-line-created-by-piyush-singh-for-jay-yash-anus-sohan-harsh-abhay-while-keeping-the-existing-header-line-owner-piyush-singh-for-yash-jay-anush-harsh-abhay",
+      "title": "Update the top application header to also display the exact additional line: \"created by Piyush Singh for Jay Yash Anus Sohan Harsh Abhay\" while keeping the existing header line \"owner Piyush Singh for Yash Jay Anush Harsh Abhay\".",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-android-packaging-build-setup-for-the-existing-web-app-and-provide-an-android-apk-build-artifact-as-part-of-the-project-deliverables-with-clear-step-by-step-documentation-for-generating-the-apk-from-this-repository",
+      "title": "Add an Android packaging/build setup for the existing web app and provide an Android APK build artifact as part of the project deliverables, with clear step-by-step documentation for generating the APK from this repository.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-investigate-and-fix-the-app-is-not-loading-issue-so-the-deployed-web-app-reliably-renders-the-login-screen-for-logged-out-users-and-the-main-app-layout-for-logged-in-users-without-getting-stuck-on-an-infinite-loading-spinner-or-a-blank-screen",
+      "title": "Investigate and fix the 'app is not loading' issue so the deployed web app reliably renders the login screen for logged-out users and the main app layout for logged-in users, without getting stuck on an infinite loading spinner or a blank screen.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-harden-frontend-startup-and-actor-initialization-so-that-access-control-initialization-calls-do-not-block-app-rendering-when-optional-secrets-are-missing-and-failures-are-handled-gracefully-with-an-actionable-english-error-message",
+      "title": "Harden frontend startup and actor initialization so that access-control/initialization calls do not block app rendering when optional secrets are missing, and failures are handled gracefully with an actionable English error message.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-produce-an-android-apk-build-artifact-from-this-repository-using-the-existing-capacitor-android-setup-and-include-it-in-the-deliverables-in-a-clearly-documented-location-in-the-repo",
+      "title": "Produce an Android APK build artifact from this repository using the existing Capacitor Android setup, and include it in the deliverables in a clearly documented location in the repo.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-stable-in-app-download-link-for-the-android-apk-by-serving-the-apk-as-a-static-file-from-the-frontend-and-exposing-an-english-labeled-download-android-apk-link-from-an-appropriate-screen-e-g-login-screen-and-or-a-simple-about-info-section",
+      "title": "Add a stable in-app download link for the Android APK by serving the APK as a static file from the frontend and exposing an English-labeled 'Download Android APK' link from an appropriate screen (e.g., Login screen and/or a simple About/Info section).",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-extend-the-existing-android-apk-documentation-to-include-prerequisites-exact-build-commands-how-to-copy-place-the-built-apk-into-the-static-public-download-path-used-by-the-app-and-how-to-verify-the-apk-opens-without-a-white-screen",
+      "title": "Update/extend the existing Android APK documentation to include: prerequisites, exact build commands, how to copy/place the built APK into the static public download path used by the app, and how to verify the APK opens without a white screen.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -215,6 +306,30 @@
       "reqIds": [
         "REQ-13"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Convert the existing web experience into a mobile-first UI (responsive layout) so it feels like a mobile app when used on phones; ensure usability on mobile screens",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Update the top header text to include the exact line: \"created by Piyush Singh for Jay Yash Anus Sohan Harsh Abhay\"",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Provide a built Android APK file as an explicit deliverable/download (release-ready build artifact)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Fix: App is not loading (investigate and resolve so the deployed build opens correctly)",
+      "reqIds": [],
       "status": "pending"
     }
   ],

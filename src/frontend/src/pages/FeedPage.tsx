@@ -52,13 +52,13 @@ export default function FeedPage() {
   };
 
   return (
-    <div className="container max-w-2xl py-8 space-y-6">
+    <div className="container max-w-2xl py-4 md:py-8 px-3 md:px-4 space-y-4 md:space-y-6">
       <Card>
-        <CardHeader>
-          <CardTitle>Create Post</CardTitle>
+        <CardHeader className="px-4 md:px-6 py-4 md:py-6">
+          <CardTitle className="text-lg md:text-xl">Create Post</CardTitle>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
             <div className="space-y-2">
               <Label htmlFor="caption">Caption</Label>
               <Textarea
@@ -67,6 +67,7 @@ export default function FeedPage() {
                 onChange={(e) => setCaption(e.target.value)}
                 placeholder="What's on your mind?"
                 rows={3}
+                className="resize-none"
               />
             </div>
             <div className="space-y-2">
@@ -94,7 +95,7 @@ export default function FeedPage() {
             )}
             <Button 
               type="submit" 
-              className="w-full"
+              className="w-full min-h-[44px]"
               disabled={createPost.isPending}
             >
               {createPost.isPending ? (
@@ -113,8 +114,8 @@ export default function FeedPage() {
         </CardContent>
       </Card>
 
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Feed</h2>
+      <div className="space-y-3 md:space-y-4">
+        <h2 className="text-xl md:text-2xl font-bold px-1">Feed</h2>
         {isLoading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />

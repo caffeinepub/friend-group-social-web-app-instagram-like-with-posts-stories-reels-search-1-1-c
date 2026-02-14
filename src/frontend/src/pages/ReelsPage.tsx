@@ -38,13 +38,13 @@ export default function ReelsPage() {
   };
 
   return (
-    <div className="container max-w-4xl py-8 space-y-6">
+    <div className="container max-w-4xl py-4 md:py-8 px-3 md:px-4 space-y-4 md:space-y-6">
       <Card>
-        <CardHeader>
-          <CardTitle>Create Reel</CardTitle>
+        <CardHeader className="px-4 md:px-6 py-4 md:py-6">
+          <CardTitle className="text-lg md:text-xl">Create Reel</CardTitle>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="px-4 md:px-6 pb-4 md:pb-6">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input
@@ -63,7 +63,7 @@ export default function ReelsPage() {
                 placeholder="https://..."
               />
             </div>
-            <Button type="submit" disabled={createReel.isPending}>
+            <Button type="submit" disabled={createReel.isPending} className="w-full min-h-[44px]">
               {createReel.isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -80,30 +80,30 @@ export default function ReelsPage() {
         </CardContent>
       </Card>
 
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Reels</h2>
+      <div className="space-y-3 md:space-y-4">
+        <h2 className="text-xl md:text-2xl font-bold px-1">Reels</h2>
         {isLoading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : reels && reels.length > 0 ? (
-          <div className="grid gap-4">
+          <div className="grid gap-3 md:gap-4">
             {reels.map((reel) => (
               <Card key={reel.id}>
-                <CardContent className="py-4">
-                  <h3 className="font-semibold text-lg mb-2">{reel.title}</h3>
+                <CardContent className="py-3 md:py-4 px-4 md:px-6">
+                  <h3 className="font-semibold text-base md:text-lg mb-2 break-words">{reel.title}</h3>
                   {reel.link && (
                     <a 
                       href={reel.link} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-primary hover:underline text-sm"
+                      className="text-primary hover:underline text-sm break-all"
                     >
                       View Video →
                     </a>
                   )}
                   <p className="text-xs text-muted-foreground mt-2">
-                    {new Date(Number(reel.timestamp) / 1000000).toLocaleString()}
+                    {new Date(Number(reel.timestamp) / 1000000).toLocaleDateString()}
                   </p>
                 </CardContent>
               </Card>
@@ -111,7 +111,7 @@ export default function ReelsPage() {
           </div>
         ) : (
           <Card>
-            <CardContent className="py-12 text-center text-muted-foreground">
+            <CardContent className="py-12 text-center text-muted-foreground text-sm">
               No reels yet. Create one to share!
             </CardContent>
           </Card>
