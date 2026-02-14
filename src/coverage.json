@@ -1,80 +1,153 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T10:43:42.896Z",
+  "generatedAt": "2026-02-14T23:30:07.771Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
-    "implemented": 5,
+    "total": 11,
+    "implemented": 11,
     "items": [
       {
-        "id": "REQ-22",
-        "summary": "Investigate and fix the 'app is not loading' issue so the deployed web app reliably renders the login screen for logged-out users and the main app layout for logged-in users, without getting stuck on an infinite loading spinner or a blank screen.",
+        "id": "REQ-30",
+        "summary": "Update the top application header to replace the existing multi-line header text with a single line exactly: \"created by Piyush Singh\" and ensure the header text color is black.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/components/startup/AppInitGate.tsx",
-          "frontend/src/components/startup/StartupErrorScreen.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/components/startup/AppInitGate.tsx",
-          "frontend/src/components/startup/StartupErrorScreen.tsx"
-        ]
-      },
-      {
-        "id": "REQ-23",
-        "summary": "Harden frontend startup and actor initialization so that access-control/initialization calls do not block app rendering when optional secrets are missing, and failures are handled gracefully with an actionable English error message.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/startup/useStartupRetry.ts",
-          "frontend/src/pages/LoginScreen.tsx",
-          "frontend/src/utils/urlParams.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/startup/useStartupRetry.ts",
-          "frontend/src/pages/LoginScreen.tsx"
-        ]
-      },
-      {
-        "id": "REQ-24",
-        "summary": "Produce an Android APK build artifact from this repository using the existing Capacitor Android setup, and include it in the deliverables in a clearly documented location in the repo.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/ANDROID_APK.md",
-          "frontend/public/downloads/.gitkeep"
-        ],
-        "matchedFiles": [
-          "frontend/public/downloads/.gitkeep"
-        ]
-      },
-      {
-        "id": "REQ-25",
-        "summary": "Add a stable in-app download link for the Android APK by serving the APK as a static file from the frontend and exposing an English-labeled 'Download Android APK' link from an appropriate screen (e.g., Login screen and/or a simple About/Info section).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/downloads/caffeine-social.apk",
-          "frontend/src/pages/LoginScreen.tsx",
           "frontend/src/components/layout/AppHeader.tsx"
         ],
         "matchedFiles": [
-          "frontend/public/downloads/caffeine-social.apk",
-          "frontend/src/pages/LoginScreen.tsx"
+          "frontend/src/components/layout/AppHeader.tsx"
         ]
       },
       {
-        "id": "REQ-26",
-        "summary": "Update/extend the existing Android APK documentation to include: prerequisites, exact build commands, how to copy/place the built APK into the static public download path used by the app, and how to verify the APK opens without a white screen.",
+        "id": "REQ-31",
+        "summary": "Display the currently logged-in user’s username in the header area, and display the static line \"Inbox owner in your account\" followed by the static username \"psrpiyush\" directly below it.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/ANDROID_APK.md",
-          "frontend/capacitor.config.ts"
+          "frontend/src/components/layout/AppHeader.tsx"
         ],
         "matchedFiles": [
-          "frontend/capacitor.config.ts"
+          "frontend/src/components/layout/AppHeader.tsx"
+        ]
+      },
+      {
+        "id": "REQ-32",
+        "summary": "Add a horizontal, horizontally-scrollable functional button bar directly below the header that contains exactly these buttons: \"Whiteboard\", \"AI Image Generation\", \"AI Writing\", and \"Chatbot\". Only this functional button row should be horizontally scrollable.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/layout/FunctionalButtonBar.tsx",
+          "frontend/src/components/layout/AppLayout.tsx",
+          "frontend/src/pages/AiToolsPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/layout/FunctionalButtonBar.tsx",
+          "frontend/src/components/layout/AppLayout.tsx",
+          "frontend/src/pages/AiToolsPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-33",
+        "summary": "Allow an authenticated user to delete their own posts from the feed UI, and persist the deletion in the Motoko canister so the deleted post does not reappear after refresh or re-login.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/queries/usePosts.ts",
+          "frontend/src/components/posts/PostCard.tsx",
+          "frontend/src/pages/FeedPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/queries/usePosts.ts",
+          "frontend/src/components/posts/PostCard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-34",
+        "summary": "Allow an authenticated user to delete their own stories from the stories UI, and persist the deletion in the Motoko canister so the deleted story does not reappear after refresh or re-login (even if it has not expired).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/queries/useStories.ts",
+          "frontend/src/pages/StoriesPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/queries/useStories.ts",
+          "frontend/src/pages/StoriesPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-35",
+        "summary": "Allow an authenticated user to delete their own reels from the reels UI, and persist the deletion in the Motoko canister so the deleted reel does not reappear after refresh or re-login.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/queries/useReels.ts",
+          "frontend/src/pages/ReelsPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/queries/useReels.ts",
+          "frontend/src/pages/ReelsPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-36",
+        "summary": "Extend the Music section to allow authenticated users to upload their own audio files and store the uploaded audio persistently in the Motoko canister; provide a list and playback UI for the user’s uploaded tracks.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/queries/useUserTracks.ts",
+          "frontend/src/pages/MusicPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/queries/useUserTracks.ts",
+          "frontend/src/pages/MusicPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-37",
+        "summary": "Implement a global password-locked \"Notifications & Info\" room that any authenticated user can enter by providing the password exactly: \"piyush1618rajput1816\"; the room shows a shared feed of notifications/information related to users and user accounts (as text entries) stored persistently in the Motoko canister.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/queries/useNotificationsRoom.ts",
+          "frontend/src/pages/ChatPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/queries/useNotificationsRoom.ts",
+          "frontend/src/pages/ChatPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-38",
+        "summary": "Implement an admin-only control mode for the global locked room that is unlocked by entering the admin password exactly: \"piyush13775\"; in this control mode, a user can remove/ban users from the global room so they can no longer access it even if they know the room password.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/queries/useNotificationsRoom.ts",
+          "frontend/src/pages/ChatPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/queries/useNotificationsRoom.ts",
+          "frontend/src/pages/ChatPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-39",
+        "summary": "Support user-created private password-locked chat rooms: each authenticated user can create a room with a room name and their own password, and only users with that password can enter; messages in these rooms must be stored persistently in the Motoko canister.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/queries/usePrivateRooms.ts",
+          "frontend/src/pages/ChatPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/queries/usePrivateRooms.ts",
+          "frontend/src/pages/ChatPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-40",
+        "summary": "Ensure the previously discussed screenshot/screen-recording blocking feature is not implemented (skipped). Do not add any fake \"screenshot attempt\" buttons or popups.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/docs/nonGoals.md"
+        ],
+        "matchedFiles": [
+          "frontend/src/docs/nonGoals.md"
         ]
       }
     ]
@@ -85,14 +158,27 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/capacitor.config.ts",
-    "frontend/public/downloads/.gitkeep",
-    "frontend/public/downloads/caffeine-social.apk",
-    "frontend/src/App.tsx",
-    "frontend/src/components/startup/AppInitGate.tsx",
-    "frontend/src/components/startup/StartupErrorScreen.tsx",
-    "frontend/src/components/startup/useStartupRetry.ts",
-    "frontend/src/pages/LoginScreen.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/layout/AppHeader.tsx",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/components/layout/FunctionalButtonBar.tsx",
+    "frontend/src/components/posts/PostCard.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/docs/nonGoals.md",
+    "frontend/src/hooks/queries/useChat.ts",
+    "frontend/src/hooks/queries/useNotificationsRoom.ts",
+    "frontend/src/hooks/queries/usePosts.ts",
+    "frontend/src/hooks/queries/usePrivateRooms.ts",
+    "frontend/src/hooks/queries/useReels.ts",
+    "frontend/src/hooks/queries/useStories.ts",
+    "frontend/src/hooks/queries/useUserTracks.ts",
+    "frontend/src/pages/AiToolsPage.tsx",
+    "frontend/src/pages/ChatPage.tsx",
+    "frontend/src/pages/MusicPage.tsx",
+    "frontend/src/pages/ReelsPage.tsx",
+    "frontend/src/pages/StoriesPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

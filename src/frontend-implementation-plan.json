@@ -1,126 +1,239 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix startup loading issues and add Android APK download link",
+  "title": "Locked rooms, user music uploads, owner-only deletions, and updated header/menu",
   "requirements": [
     {
-      "id": "REQ-22",
-      "summary": "Fix initial render so logged-out users always see Login quickly, logged-in users reliably reach the authenticated layout, and failures show an actionable error instead of infinite loading/blank screen.",
+      "id": "REQ-30",
+      "summary": "Replace the existing multi-line header text with a single black line reading exactly \"created by Piyush Singh\" on authenticated screens.",
       "acceptanceCriteria": [
-        "Opening the deployed web app on a fresh browser session shows the Login screen within 5 seconds (no blank screen).",
-        "After signing in with Internet Identity, the app navigates into the authenticated experience and renders content (e.g., Feed) without being stuck on 'Loading...'.",
-        "If backend/actor initialization fails for any reason, the UI shows an English error state with a retry action instead of spinning indefinitely.",
-        "No uncaught exceptions appear in the browser console during initial load, login, and first navigation."
+        "On all authenticated screens, the header displays only one line of text: \"created by Piyush Singh\".",
+        "The header text is rendered in black (not muted/gray and not theme-dependent).",
+        "The previous two header lines are no longer shown anywhere in the header."
       ],
       "file_operations": [
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Refactor RootComponent gating so the LoginScreen renders immediately for logged-out users, and authenticated rendering (AppLayout/ProfileSetupModal) is guarded by a dedicated initialization state that can surface an English error UI + retry instead of an infinite spinner/blank screen."
-        },
-        {
-          "path": "frontend/src/components/startup/AppInitGate.tsx",
-          "operation": "create",
-          "description": "Create an app initialization gate component that coordinates actor readiness and profile loading, prevents rendering authenticated routes until dependencies are ready, and exposes a retry action that re-attempts initialization via React Query invalidation (no direct edits to forbidden hooks)."
-        },
-        {
-          "path": "frontend/src/components/startup/StartupErrorScreen.tsx",
-          "operation": "create",
-          "description": "Create a simple English error-state component (title, short description, optional technical details in a collapsible area, and a Retry button) used when actor/profile initialization fails (avoid any dependency on forbidden hook edits)."
-        }
-      ]
-    },
-    {
-      "id": "REQ-23",
-      "summary": "Harden frontend startup so missing optional secrets do not block rendering, and initialization failures are handled gracefully with an English error and retry while keeping Login accessible.",
-      "acceptanceCriteria": [
-        "When no admin token/secret is present, the app still loads and authentication flows work (no initialization-related crash or infinite spinner).",
-        "When initialization fails (simulated by forcing an error), the app shows an English error UI with a retry button that re-attempts initialization.",
-        "The login screen remains accessible even if anonymous actor creation/initialization fails (i.e., the user is not blocked from seeing the login UI)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/startup/useStartupRetry.ts",
-          "operation": "create",
-          "description": "Add a small hook that provides a stable retry callback to re-attempt startup by invalidating/refetching React Query caches related to actor/profile queries (without modifying frontend/src/hooks/useActor.ts or other forbidden hook files)."
-        },
-        {
-          "path": "frontend/src/pages/LoginScreen.tsx",
-          "operation": "modify",
-          "description": "Ensure the login screen remains fully usable regardless of background initialization status by rendering any startup error messaging non-blockingly (English text only) and keeping the Internet Identity sign-in button accessible. Verify the component's usage instructions before implementing (shadcn-ui Button/Card usage)."
-        },
-        {
-          "path": "frontend/src/utils/urlParams.ts",
-          "operation": "modify",
-          "description": "Add non-breaking utilities to support startup hardening (e.g., a safe helper for checking presence of optional secrets and/or a documented, explicit 'optional secret' getter) so higher-level code can avoid treating missing secrets as fatal; do not change existing exported behavior in a way that would break current routes."
-        }
-      ]
-    },
-    {
-      "id": "REQ-24",
-      "summary": "Document how to produce an Android APK using the existing Capacitor Android setup, and store the generated artifact in a clearly documented repo location.",
-      "acceptanceCriteria": [
-        "A successfully built APK (debug or release) is generated via documented steps in this repo and can be installed on an Android device/emulator.",
-        "The repo documentation clearly states the exact output path(s) where the generated APK can be found after the build completes.",
-        "The Android build uses the existing Capacitor configuration and builds the current web app version (no missing assets / white screen on launch)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/ANDROID_APK.md",
-          "operation": "modify",
-          "description": "Extend the existing Capacitor Android build guide to clearly specify: (1) the exact Gradle output paths for debug/release APKs, (2) the repo location to place the final downloadable APK (static public path), and (3) a quick verification checklist to avoid Android 'white screen' (correct webDir build, capacitor sync, and asset presence)."
-        },
-        {
-          "path": "frontend/public/downloads/.gitkeep",
-          "operation": "create",
-          "description": "Add a tracked downloads directory placeholder under the static public path to establish the documented location for publishing the built APK for web download."
-        }
-      ]
-    },
-    {
-      "id": "REQ-25",
-      "summary": "Serve the Android APK as a static frontend asset and expose an English-labeled 'Download Android APK' link from a screen accessible when logged out.",
-      "acceptanceCriteria": [
-        "The APK file is placed under a static public path (e.g., within frontend/public) so it is downloadable from the deployed web site.",
-        "The UI displays an English 'Download Android APK' link that downloads the APK when clicked.",
-        "The download link remains visible/accessible even if the user is not logged in."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/downloads/caffeine-social.apk",
-          "operation": "create",
-          "description": "Add the generated Android APK artifact to a stable static public location so it can be downloaded from the deployed site (this file should be produced by the documented build steps and placed here for release)."
-        },
-        {
-          "path": "frontend/src/pages/LoginScreen.tsx",
-          "operation": "modify",
-          "description": "Add an English 'Download Android APK' link/button on the Login screen that points to the static public APK path and triggers a direct download; keep it visible for logged-out users. Verify the component's usage instructions before implementing (shadcn-ui Button/Card usage)."
-        },
         {
           "path": "frontend/src/components/layout/AppHeader.tsx",
           "operation": "modify",
-          "description": "Optionally add a lightweight, always-English 'Download Android APK' link in the header area that is visible when logged out is not applicable here; ensure it does not introduce new routes and does not interfere with existing logout behavior. Verify the component's usage instructions before implementing (shadcn-ui Button usage if used)."
+          "description": "Update the header branding text area to remove the existing two-line copy and render a single line exactly \"created by Piyush Singh\" with explicit black text styling (not theme-dependent)."
         }
       ]
     },
     {
-      "id": "REQ-26",
-      "summary": "Update Android APK documentation with prerequisites, exact build commands, how to publish the APK to the static download path, and verification steps for both web and Android startup.",
+      "id": "REQ-31",
+      "summary": "Show the logged-in user’s username in the header, plus a static two-line owner label: \"Inbox owner in your account\" and \"psrpiyush\".",
       "acceptanceCriteria": [
-        "Documentation provides step-by-step commands to build the web app, sync Capacitor, and build the Android APK.",
-        "Documentation explains how to publish the APK for web download (static file placement + resulting URL).",
-        "Documentation includes a verification checklist for both web load and Android app load (ensuring the app is not stuck loading)."
+        "When logged in and the caller has a saved profile, the header shows the user’s profile username.",
+        "The header also shows the static text \"Inbox owner in your account\" and the static value \"psrpiyush\" below it.",
+        "If the user profile is not yet available, the UI shows an English placeholder (e.g., \"Username: (not set)\") without crashing."
       ],
       "file_operations": [
         {
-          "path": "frontend/ANDROID_APK.md",
+          "path": "frontend/src/components/layout/AppHeader.tsx",
           "operation": "modify",
-          "description": "Add explicit commands for: install deps, web build to match Capacitor webDir, Capacitor sync, Android build, plus exact copy/move instructions to place the produced APK into frontend/public/downloads/caffeine-social.apk and a checklist to verify no white screen (Android) and no infinite spinner/blank screen (web)."
+          "description": "Use the authorization component’s frontend guidance (profile fetch via getCallerUserProfile) to display the current user profile username in the header, with an English placeholder when absent; render the static lines \"Inbox owner in your account\" and \"psrpiyush\" directly below. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-32",
+      "summary": "Add a horizontally scrollable functional button bar below the header with four buttons navigating to existing feature screens.",
+      "acceptanceCriteria": [
+        "A button row is rendered below the header on authenticated screens.",
+        "The button row can be scrolled horizontally on small screens (overflow-x enabled) while the rest of the page does not horizontally scroll.",
+        "Tapping each button navigates to the existing corresponding feature screen (Whiteboard, Image Generator, AI Writing Tool, Local Chatbot).",
+        "All button labels are in English exactly as specified."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/FunctionalButtonBar.tsx",
+          "operation": "create",
+          "description": "Create a horizontal functional button bar (overflow-x enabled only for this row) with buttons labeled exactly: \"Whiteboard\", \"AI Image Generation\", \"AI Writing\", \"Chatbot\"; wire clicks to navigate to existing routes (/study and /ai with a tab query selector)."
         },
         {
-          "path": "frontend/capacitor.config.ts",
+          "path": "frontend/src/components/layout/AppLayout.tsx",
           "operation": "modify",
-          "description": "Align documentation and configuration assumptions by verifying the configured webDir matches the build output used by the documented commands, and update config comments if needed to reduce the risk of Android loading a stale/missing dist directory."
+          "description": "Render the new FunctionalButtonBar directly below AppHeader so it appears on all authenticated screens, and ensure the rest of the layout does not gain horizontal scrolling."
+        },
+        {
+          "path": "frontend/src/pages/AiToolsPage.tsx",
+          "operation": "modify",
+          "description": "Update AI Tools page to read a simple URL query parameter (e.g., tab=writing|image|chatbot) and set the active tab accordingly so the functional button bar can deep-link into AI Writing / Image Generator / Chatbot."
+        }
+      ]
+    },
+    {
+      "id": "REQ-33",
+      "summary": "Add owner-only delete controls for feed posts and update the UI state so deleted posts disappear immediately.",
+      "acceptanceCriteria": [
+        "A delete action is available on post items in the feed UI for the post owner only.",
+        "Attempting to delete another user’s post fails with a clear English error message.",
+        "After deleting a post, it disappears from the feed without requiring a full page reload and does not reappear after re-login.",
+        "Backend enforces owner-only deletion."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/usePosts.ts",
+          "operation": "modify",
+          "description": "Add a delete-post mutation that calls the backend deletePost capability and invalidates the posts query so the feed updates immediately after deletion."
+        },
+        {
+          "path": "frontend/src/components/posts/PostCard.tsx",
+          "operation": "modify",
+          "description": "Fix the post type to match backend post data and add an owner-only Delete control (visible only when the logged-in principal matches post.author). Show actionable English errors from failed deletions (including unauthorized attempts). Use the authorization component’s guidance to compare principals. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/FeedPage.tsx",
+          "operation": "modify",
+          "description": "Ensure the Feed page passes any needed context/handlers to PostCard and surfaces deletion success/failure with English toast messages."
+        }
+      ]
+    },
+    {
+      "id": "REQ-34",
+      "summary": "Add owner-only delete controls for stories and update the UI so deleted stories are removed immediately.",
+      "acceptanceCriteria": [
+        "A delete action is available on story items for the story owner only.",
+        "Attempting to delete another user’s story fails with a clear English error message.",
+        "After deleting a story, it no longer appears in the active stories list and does not reappear after re-login.",
+        "Backend enforces owner-only deletion."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/useStories.ts",
+          "operation": "modify",
+          "description": "Add a delete-story mutation that calls the backend deleteStory capability and invalidates the stories query."
+        },
+        {
+          "path": "frontend/src/pages/StoriesPage.tsx",
+          "operation": "modify",
+          "description": "Add an owner-only Delete control for each story item (visible only when current principal matches story.author), call the delete-story mutation, and display English success/error messages; keep the list updated without a full reload. Use the authorization component’s guidance to compare principals. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-35",
+      "summary": "Add owner-only delete controls for reels and update the UI so deleted reels are removed immediately.",
+      "acceptanceCriteria": [
+        "A delete action is available on reel items for the reel owner only.",
+        "Attempting to delete another user’s reel fails with a clear English error message.",
+        "After deleting a reel, it no longer appears in the reels list and does not reappear after re-login.",
+        "Backend enforces owner-only deletion."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/useReels.ts",
+          "operation": "modify",
+          "description": "Add a delete-reel mutation that calls the backend deleteReel capability and invalidates the reels query."
+        },
+        {
+          "path": "frontend/src/pages/ReelsPage.tsx",
+          "operation": "modify",
+          "description": "Add an owner-only Delete control for each reel item (visible only when current principal matches reel.author), call the delete-reel mutation, and display English success/error messages; keep the reels list updated without a full reload. Use the authorization component’s guidance to compare principals. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-36",
+      "summary": "Extend the Music section to support user audio uploads stored in the canister, plus listing and in-app playback of uploaded tracks.",
+      "acceptanceCriteria": [
+        "Music page includes an upload control that accepts common audio formats (at minimum: audio/*).",
+        "Uploaded audio is stored in the canister and remains available after refresh and re-login.",
+        "Users can see a list of their uploaded tracks and play them in-app.",
+        "Uploading and playback errors are shown in actionable English messages (no silent failures)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/useUserTracks.ts",
+          "operation": "create",
+          "description": "Create React Query hooks to (1) load the current user’s uploaded tracks via getUserTracks and (2) upload a new track via uploadTrack, including cache invalidation and actionable English error propagation."
+        },
+        {
+          "path": "frontend/src/pages/MusicPage.tsx",
+          "operation": "modify",
+          "description": "Replace/augment the demo music library UI with an upload form (accept=\"audio/*\"), a list of the caller’s uploaded tracks, and playback using URLs from ExternalBlob.getDirectURL(). Use the blob-storage component’s ExternalBlob capability for converting selected files to bytes and tracking upload progress if desired. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-37",
+      "summary": "Add a password-locked global \"Notifications & Info\" room with persistent shared text feed access via room password entry.",
+      "acceptanceCriteria": [
+        "There is a UI entry point to open the global \"Notifications & Info\" room that prompts for the password.",
+        "Entering password \"piyush1618rajput1816\" grants access; any other password is rejected with an English error message.",
+        "The room contains a shared, persistent text feed visible to all users who enter the room.",
+        "Entries in the feed persist across refresh and re-login."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/useNotificationsRoom.ts",
+          "operation": "create",
+          "description": "Create hooks for entering the Notifications & Info room (enterNotificationsRoom), fetching room entries (getNotificationsRoomEntries), and adding an entry (addNotification), with clear English error handling."
+        },
+        {
+          "path": "frontend/src/pages/ChatPage.tsx",
+          "operation": "modify",
+          "description": "Add a clear UI entry point within Chat to open the global \"Notifications & Info\" room, prompt for the password, handle incorrect passwords with English errors, and show the shared persistent text feed plus an input to add new entries."
+        }
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "summary": "Add admin-only control mode for the global locked room via an admin password to ban/unban users from the room.",
+      "acceptanceCriteria": [
+        "Within the global locked room UI, there is a separate admin unlock flow requiring password \"piyush13775\".",
+        "After admin unlock, the UI shows controls to remove/ban a selected user from the global room.",
+        "A banned user cannot re-enter the global room even with password \"piyush1618rajput1816\".",
+        "All admin actions and ban state persist across refresh and re-login.",
+        "Non-admin users cannot see or use admin controls unless they enter the admin password."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/useNotificationsRoom.ts",
+          "operation": "modify",
+          "description": "Extend Notifications room hooks to support admin unlock (enterNotificationsRoomAdminMode) and admin actions (banUserFromNotificationsRoom, unbanUserFromNotificationsRoom), surfacing authorization failures as clear English UI errors. Use the authorization component guidance to keep admin controls gated behind explicit admin-password unlock. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/ChatPage.tsx",
+          "operation": "modify",
+          "description": "Within the Notifications & Info room UI, add a separate admin unlock flow requiring \"piyush13775\"; only after unlock show ban/unban controls (e.g., via a target user principal input) and persist the unlocked state only in-session (do not reveal admin controls otherwise)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-39",
+      "summary": "Support user-created private password-locked chat rooms with create/join flows and persistent messages.",
+      "acceptanceCriteria": [
+        "Users can create a private locked room by providing a room name and password.",
+        "Users can join an existing private locked room by providing the correct password.",
+        "Private room messages persist across refresh and re-login.",
+        "Only users with the password can access the room’s messages; wrong passwords are rejected with an English error message."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/queries/usePrivateRooms.ts",
+          "operation": "create",
+          "description": "Create hooks to create a private room (createPrivateChatRoom), enter a room (enterPrivateChatRoom), load messages (getChatRoomMessages), and send messages (addChatRoomMessage), with actionable English errors for incorrect passwords/unauthorized access."
+        },
+        {
+          "path": "frontend/src/pages/ChatPage.tsx",
+          "operation": "modify",
+          "description": "Add a Private Locked Rooms section to Chat with: (1) create flow that asks for room name + password, (2) join flow that asks for room owner identifier + password, and (3) room message list + composer. Ensure wrong passwords are rejected with English errors and messages persist via backend reload."
+        }
+      ]
+    },
+    {
+      "id": "REQ-40",
+      "summary": "Ensure screenshot/screen-recording blocking is not implemented and no UI references it.",
+      "acceptanceCriteria": [
+        "No UI elements or logic exist that claim to block screenshots/screen recording or prompt for a screenshot code.",
+        "No user-facing text references screenshot blocking or a screenshot PIN code."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/docs/nonGoals.md",
+          "operation": "create",
+          "description": "Add a short internal developer note explicitly stating that screenshot/screen-recording blocking must not be implemented and must not be referenced in any user-facing UI text, reinforcing the skipped feature requirement."
         }
       ]
     }

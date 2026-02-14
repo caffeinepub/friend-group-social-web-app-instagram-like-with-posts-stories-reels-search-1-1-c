@@ -11,13 +11,20 @@ import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
 export interface Data {
+  'id' : TrackId,
+  'title' : string,
+  'audio' : ExternalBlob,
+  'author' : UserId,
+  'timestamp' : Time,
+}
+export interface Data__1 {
   'id' : MessageId,
   'content' : string,
   'recipient' : UserId,
   'sender' : UserId,
   'timestamp' : Time,
 }
-export interface Data__1 {
+export interface Data__2 {
   'id' : StoryId,
   'text' : string,
   'author' : UserId,
@@ -25,7 +32,7 @@ export interface Data__1 {
   'image' : [] | [ExternalBlob],
   'expiry' : Time,
 }
-export interface Data__2 {
+export interface Data__3 {
   'id' : ReelId,
   'title' : string,
   'video' : [] | [ExternalBlob],
@@ -33,19 +40,31 @@ export interface Data__2 {
   'author' : UserId,
   'timestamp' : Time,
 }
-export interface Data__3 {
+export interface Data__4 {
   'id' : PostId,
   'author' : UserId,
   'timestamp' : Time,
   'caption' : string,
   'image' : [] | [ExternalBlob],
 }
+export interface Data__5 {
+  'id' : MessageId,
+  'text' : string,
+  'author' : UserId,
+  'timestamp' : Time,
+}
 export type ExternalBlob = Uint8Array;
 export type MessageId = string;
+export interface Notification {
+  'content' : string,
+  'sender' : UserId,
+  'timestamp' : Time,
+}
 export type PostId = string;
 export type ReelId = string;
 export type StoryId = string;
 export type Time = bigint;
+export type TrackId = string;
 export type UserId = Principal;
 export interface UserProfile {
   'bio' : [] | [string],
@@ -84,26 +103,43 @@ export interface _SERVICE {
   >,
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addChatRoomMessage' : ActorMethod<[UserId, string], undefined>,
+  'addNotification' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
-  'createPost' : ActorMethod<[string, [] | [ExternalBlob]], Data__3>,
+  'banUserFromNotificationsRoom' : ActorMethod<[string, UserId], undefined>,
+  'createPost' : ActorMethod<[string, [] | [ExternalBlob]], Data__4>,
+  'createPrivateChatRoom' : ActorMethod<[string], undefined>,
   'createReel' : ActorMethod<
     [string, [] | [ExternalBlob], [] | [string]],
-    Data__2
+    Data__3
   >,
-  'createStory' : ActorMethod<[string, [] | [ExternalBlob]], Data__1>,
-  'getActiveStories' : ActorMethod<[], Array<Data__1>>,
+  'createStory' : ActorMethod<[string, [] | [ExternalBlob]], Data__2>,
+  'deletePost' : ActorMethod<[PostId], undefined>,
+  'deleteReel' : ActorMethod<[ReelId], undefined>,
+  'deleteStory' : ActorMethod<[StoryId], undefined>,
+  'enterNotificationsRoom' : ActorMethod<[string], undefined>,
+  'enterNotificationsRoomAdminMode' : ActorMethod<[string], undefined>,
+  'enterPrivateChatRoom' : ActorMethod<[UserId, string], undefined>,
+  'getActiveStories' : ActorMethod<[], Array<Data__2>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
-  'getMessage' : ActorMethod<[MessageId], [] | [Data]>,
-  'getMessages' : ActorMethod<[UserId], Array<Data>>,
-  'getPosts' : ActorMethod<[], Array<Data__3>>,
-  'getReels' : ActorMethod<[], Array<Data__2>>,
-  'getStory' : ActorMethod<[StoryId], [] | [Data__1]>,
+  'getChatRoomMessages' : ActorMethod<[UserId], Array<Data__5>>,
+  'getFameLevel' : ActorMethod<[], bigint>,
+  'getMessage' : ActorMethod<[MessageId], [] | [Data__1]>,
+  'getMessages' : ActorMethod<[UserId], Array<Data__1>>,
+  'getNotificationsRoomEntries' : ActorMethod<[], Array<Notification>>,
+  'getPosts' : ActorMethod<[], Array<Data__4>>,
+  'getPrivacySetting' : ActorMethod<[], string>,
+  'getReels' : ActorMethod<[], Array<Data__3>>,
+  'getStory' : ActorMethod<[StoryId], [] | [Data__2]>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getUserTracks' : ActorMethod<[UserId], Array<Data>>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'searchUsernames' : ActorMethod<[string], Array<string>>,
-  'sendMessage' : ActorMethod<[Principal, string], Data>,
+  'sendMessage' : ActorMethod<[Principal, string], Data__1>,
+  'unbanUserFromNotificationsRoom' : ActorMethod<[string, UserId], undefined>,
+  'uploadTrack' : ActorMethod<[string, ExternalBlob], Data>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

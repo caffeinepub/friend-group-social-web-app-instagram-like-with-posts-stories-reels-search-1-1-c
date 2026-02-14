@@ -2,10 +2,12 @@ import { useInternetIdentity } from '../../hooks/useInternetIdentity';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
+import { useGetCallerUserProfile } from '../../hooks/queries/useCurrentUserProfile';
 
 export default function AppHeader() {
   const { clear, identity } = useInternetIdentity();
   const queryClient = useQueryClient();
+  const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
 
   const handleLogout = async () => {
     await clear();
@@ -21,9 +23,17 @@ export default function AppHeader() {
             alt="Caffeine Social" 
             className="h-7 md:h-10 w-auto flex-shrink-0"
           />
-          <div className="hidden lg:flex flex-col text-xs text-muted-foreground border-l pl-3 md:pl-4 gap-0.5">
-            <div>owner Piyush Singh for Yash Jay Anush Harsh Abhay</div>
-            <div>created by Piyush Singh for Jay Yash Anus Sohan Harsh Abhay</div>
+          <div className="hidden lg:flex flex-col text-xs border-l pl-3 md:pl-4 gap-0.5">
+            <div className="text-black dark:text-black font-medium">created by Piyush Singh</div>
+            {identity && (
+              <div className="text-muted-foreground space-y-0.5">
+                <div>
+                  Username: {profileLoading ? '...' : isFetched && userProfile ? userProfile.username : '(not set)'}
+                </div>
+                <div>Inbox owner in your account</div>
+                <div className="font-medium">psrpiyush</div>
+              </div>
+            )}
           </div>
         </div>
         {identity && (

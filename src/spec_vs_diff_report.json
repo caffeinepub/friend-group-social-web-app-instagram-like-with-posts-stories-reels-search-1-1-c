@@ -1,51 +1,130 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T10:43:42.892Z",
-  "summary": "The diff adds a startup initialization gate with a retryable English error screen, updates App routing to show Login immediately for logged-out users, and adds an APK file under frontend/public with a visible 'Download Android APK' button on the Login screen. However, the required Android build/documentation deliverables (REQ-24/REQ-26) are not evidenced in the diff, and hardening around missing optional admin secrets (REQ-23) is not explicitly shown beyond generic startup gating/retry UX.",
+  "generatedAt": "2026-02-14T23:30:07.766Z",
+  "summary": "Diff implements the functional button bar, header text/username block, owner-only delete UI hooks for posts/stories/reels, user music uploads, and UI/hook scaffolding for a global locked Notifications room + admin mode and private locked rooms. However, some requirements cannot be fully verified due to truncated backend diff, and the header/username block appears hidden on smaller screens (not meeting 'on all authenticated screens'). Several extra features/pages unrelated to the request also appear in the change set (per file summaries).",
   "missing_requirements": [
     {
-      "id": "REQ-23",
-      "requirement": "Harden frontend startup and actor initialization so access-control/initialization calls do not block rendering when optional secrets are missing, and failures are handled gracefully with an actionable English error message.",
-      "reason": "While a generic AppInitGate + StartupErrorScreen with Retry is added, the diff summary does not show any change specifically addressing 'optional secrets' (e.g., missing admin token/secret) to ensure the app still loads without initialization-related crashes/spinners. No evidence indicates conditional logic around missing secrets or removal of secret-dependent blocking calls.",
+      "id": "REQ-30",
+      "requirement": "On all authenticated screens, the header displays only one line exactly \"created by Piyush Singh\" and it is rendered in black (not theme-dependent).",
+      "reason": "The required header line is only rendered inside a container with `hidden lg:flex`, meaning it will not appear on mobile/tablet sizes; this violates the 'on all authenticated screens' acceptance criteria. Also, the header still contains additional elements (logo), so the \"only one line\" requirement is not clearly satisfied as stated.",
       "evidence": [
-        "frontend/src/components/startup/AppInitGate.tsx",
-        "frontend/src/components/startup/StartupErrorScreen.tsx",
-        "frontend/src/App.tsx"
+        "frontend/src/components/layout/AppHeader.tsx"
       ]
     },
     {
-      "id": "REQ-24",
-      "requirement": "Produce an Android APK build artifact using the existing Capacitor Android setup and include it in deliverables in a clearly documented location in the repo.",
-      "reason": "An APK file is added under frontend/public/downloads, and capacitor.config.ts is present/modified, but the diff does not include documentation stating build steps and the exact output path(s) where the generated APK can be found after building via Capacitor/Gradle.",
+      "id": "REQ-31",
+      "requirement": "Display the currently logged-in user’s username in the header area, plus the static line \"Inbox owner in your account\" and static username \"psrpiyush\" directly below it; show an English placeholder if profile unavailable.",
+      "reason": "The username + static lines block is also inside `hidden lg:flex`, so it will not display on smaller screens even when authenticated, contradicting the requirement to display in the header area (implicitly across authenticated usage).",
       "evidence": [
-        "frontend/public/downloads/caffeine-social.apk",
-        "frontend/capacitor.config.ts"
+        "frontend/src/components/layout/AppHeader.tsx"
       ]
     },
     {
-      "id": "REQ-26",
-      "requirement": "Update/extend Android APK documentation to include prerequisites, exact build commands, how to copy/place the built APK into the static public download path, and how to verify the APK opens without a white screen.",
-      "reason": "No documentation file changes (e.g., README) are shown in the diff summary. Therefore the required step-by-step build/sync commands, publishing steps (copy into frontend/public/downloads + resulting URL), and verification checklist are not evidenced.",
+      "id": "REQ-33",
+      "requirement": "Backend-enforced owner-only deletion of posts, persisted in the Motoko canister so deleted posts do not reappear after refresh/re-login.",
+      "reason": "Frontend wiring for delete exists, but backend implementation details (owner check, persistence semantics, clear error messages) cannot be verified from the truncated backend diff; `deletePost` implementation is not shown.",
       "evidence": [
-        "frontend/public/downloads/caffeine-social.apk",
-        "frontend/public/downloads/.gitkeep"
+        "frontend/src/components/posts/PostCard.tsx",
+        "frontend/src/hooks/queries/usePosts.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-34",
+      "requirement": "Backend-enforced owner-only deletion of stories, persisted in the Motoko canister so deleted stories do not reappear after refresh/re-login (even if not expired).",
+      "reason": "Frontend wiring for delete exists, but the backend story deletion function/authorization/persistence is not verifiable from the truncated backend diff; `deleteStory` implementation is not shown.",
+      "evidence": [
+        "frontend/src/pages/StoriesPage.tsx",
+        "frontend/src/hooks/queries/useStories.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-35",
+      "requirement": "Backend-enforced owner-only deletion of reels, persisted in the Motoko canister so deleted reels do not reappear after refresh/re-login.",
+      "reason": "Frontend wiring for delete exists, but the backend reel deletion function/authorization/persistence is not verifiable from the truncated backend diff; `deleteReel` implementation is not shown.",
+      "evidence": [
+        "frontend/src/pages/ReelsPage.tsx",
+        "frontend/src/hooks/queries/useReels.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-37",
+      "requirement": "Global password-locked \"Notifications & Info\" room with password exactly \"piyush1618rajput1816\"; wrong password rejected; shared persistent text feed stored in canister.",
+      "reason": "Frontend hooks and UI flow call `enterNotificationsRoom` and fetch entries, but the backend password check, persistence, and shared feed behavior are not verifiable from the truncated backend diff; the exact password constant is not evidenced in the shown backend snippet.",
+      "evidence": [
+        "frontend/src/hooks/queries/useNotificationsRoom.ts",
+        "frontend/src/pages/ChatPage.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "requirement": "Admin-only control mode for the global locked room with admin password exactly \"piyush13775\"; admin can ban/remove users so they cannot access even with room password; ban state persists; admin controls hidden unless unlocked.",
+      "reason": "Frontend hooks/UI for admin mode and ban/unban exist, but backend enforcement (exact password, ban persistence, and preventing banned users from entering) is not verifiable from the truncated backend diff.",
+      "evidence": [
+        "frontend/src/hooks/queries/useNotificationsRoom.ts",
+        "frontend/src/pages/ChatPage.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-39",
+      "requirement": "User-created private password-locked chat rooms: create with room name + password; join with correct password; messages persist in canister; wrong passwords rejected with English error.",
+      "reason": "Frontend hooks/UI exist for creating/entering rooms and reading/writing messages, but the backend implementation and persistence/password enforcement cannot be verified from the truncated backend diff. Also, the create hook only passes a password (`createPrivateChatRoom(password)`) with no evidence of passing a room name as required.",
+      "evidence": [
+        "frontend/src/hooks/queries/usePrivateRooms.ts",
+        "frontend/src/pages/ChatPage.tsx",
+        "backend/main.mo"
       ]
     }
   ],
-  "hallucinated_features": [],
-  "confidence": 0.68,
+  "hallucinated_features": [
+    {
+      "description": "Added an Android APK download button/flow on the login screen.",
+      "reason": "Not requested in REQ-30..REQ-40 and unrelated to locked rooms, music uploads, deletion, or header/menu updates.",
+      "evidence": [
+        "frontend-file-summaries.txt (frontend/src/pages/LoginScreen.tsx)"
+      ]
+    },
+    {
+      "description": "Added/modified multiple mini-games (Tic-Tac-Toe, Memory Match, Snake, 2048, Quiz) and a Games page with mobile tab scrolling.",
+      "reason": "Not requested in REQ-30..REQ-40.",
+      "evidence": [
+        "frontend-file-summaries.txt (frontend/src/pages/GamesPage.tsx, frontend/src/games/*)"
+      ]
+    },
+    {
+      "description": "Added documentation page `frontend/src/docs/nonGoals.md` describing screenshot blocking as a non-goal.",
+      "reason": "While aligned with REQ-40, the requirement did not ask to add a documentation file; this is extra scope beyond explicit implementation requirements.",
+      "evidence": [
+        "frontend/src/docs/nonGoals.md"
+      ]
+    }
+  ],
+  "confidence": 0.62,
   "changed_files": [
     "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/capacitor.config.ts",
-    "frontend/public/downloads/.gitkeep",
-    "frontend/public/downloads/caffeine-social.apk",
-    "frontend/src/App.tsx",
-    "frontend/src/components/startup/AppInitGate.tsx",
-    "frontend/src/components/startup/StartupErrorScreen.tsx",
-    "frontend/src/components/startup/useStartupRetry.ts",
-    "frontend/src/pages/LoginScreen.tsx",
+    "frontend/src/components/layout/AppHeader.tsx",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/components/layout/FunctionalButtonBar.tsx",
+    "frontend/src/components/posts/PostCard.tsx",
+    "frontend/src/docs/nonGoals.md",
+    "frontend/src/hooks/queries/useChat.ts",
+    "frontend/src/hooks/queries/useNotificationsRoom.ts",
+    "frontend/src/hooks/queries/usePosts.ts",
+    "frontend/src/hooks/queries/usePrivateRooms.ts",
+    "frontend/src/hooks/queries/useReels.ts",
+    "frontend/src/hooks/queries/useStories.ts",
+    "frontend/src/hooks/queries/useUserTracks.ts",
+    "frontend/src/pages/AiToolsPage.tsx",
+    "frontend/src/pages/ChatPage.tsx",
+    "frontend/src/pages/MusicPage.tsx",
+    "frontend/src/pages/ReelsPage.tsx",
+    "frontend/src/pages/StoriesPage.tsx",
     "project_state.json"
   ]
 }

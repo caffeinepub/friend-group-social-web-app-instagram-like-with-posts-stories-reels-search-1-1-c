@@ -1,11 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from '../useActor';
-import type { Data, UserId } from '../../backend';
+import type { Data__1, UserId } from '../../backend';
 
 export function useGetMessages(partner: string) {
   const { actor, isFetching } = useActor();
 
-  return useQuery<Data[]>({
+  return useQuery<Data__1[]>({
     queryKey: ['messages', partner],
     queryFn: async () => {
       if (!actor || !partner) return [];

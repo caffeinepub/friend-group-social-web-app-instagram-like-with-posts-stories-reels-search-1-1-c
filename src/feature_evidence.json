@@ -2,12 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-investigate-and-fix-the-app-is-not-loading-issue-so-the-deployed-web-app-reliably-renders-the-login-screen-for-logged-out-users-and-the-main-app-layout-for-logged-in-users-without-getting-stuck-on-an-infinite-loading-spinner-or-a-blank-screen",
-      "featureTitle": "Investigate and fix the 'app is not loading' issue so the deployed web app reliably renders the login screen for logged-out users and the main app layout for logged-in users, without getting stuck on an infinite loading spinner or a blank screen.",
+      "featureId": "feature-update-the-top-application-header-to-replace-the-existing-multi-line-header-text-with-a-single-line-exactly-created-by-piyush-singh-and-ensure-the-header-text-color-is-black",
+      "featureTitle": "Update the top application header to replace the existing multi-line header text with a single line exactly: \"created by Piyush Singh\" and ensure the header text color is black.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/startup/AppInitGate.tsx",
-        "frontend/src/components/startup/StartupErrorScreen.tsx"
+        "frontend/src/components/layout/AppHeader.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -19,16 +17,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-22"
+        "REQ-30"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-harden-frontend-startup-and-actor-initialization-so-that-access-control-initialization-calls-do-not-block-app-rendering-when-optional-secrets-are-missing-and-failures-are-handled-gracefully-with-an-actionable-english-error-message",
-      "featureTitle": "Harden frontend startup and actor initialization so that access-control/initialization calls do not block app rendering when optional secrets are missing, and failures are handled gracefully with an actionable English error message.",
+      "featureId": "feature-display-the-currently-logged-in-user-s-username-in-the-header-area-and-display-the-static-line-inbox-owner-in-your-account-followed-by-the-static-username-psrpiyush-directly-below-it",
+      "featureTitle": "Display the currently logged-in user’s username in the header area, and display the static line \"Inbox owner in your account\" followed by the static username \"psrpiyush\" directly below it.",
       "files": [
-        "frontend/src/components/startup/useStartupRetry.ts",
-        "frontend/src/pages/LoginScreen.tsx"
+        "frontend/src/components/layout/AppHeader.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -40,15 +37,17 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-23"
+        "REQ-31"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-produce-an-android-apk-build-artifact-from-this-repository-using-the-existing-capacitor-android-setup-and-include-it-in-the-deliverables-in-a-clearly-documented-location-in-the-repo",
-      "featureTitle": "Produce an Android APK build artifact from this repository using the existing Capacitor Android setup, and include it in the deliverables in a clearly documented location in the repo.",
+      "featureId": "feature-add-a-horizontal-horizontally-scrollable-functional-button-bar-directly-below-the-header-that-contains-exactly-these-buttons-whiteboard-ai-image-generation-ai-writing-and-chatbot-only-this-functional-button-row-should-be-horizontally-scrollable",
+      "featureTitle": "Add a horizontal, horizontally-scrollable functional button bar directly below the header that contains exactly these buttons: \"Whiteboard\", \"AI Image Generation\", \"AI Writing\", and \"Chatbot\". Only this functional button row should be horizontally scrollable.",
       "files": [
-        "frontend/public/downloads/.gitkeep"
+        "frontend/src/components/layout/AppLayout.tsx",
+        "frontend/src/components/layout/FunctionalButtonBar.tsx",
+        "frontend/src/pages/AiToolsPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -60,16 +59,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-24"
+        "REQ-32"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-stable-in-app-download-link-for-the-android-apk-by-serving-the-apk-as-a-static-file-from-the-frontend-and-exposing-an-english-labeled-download-android-apk-link-from-an-appropriate-screen-e-g-login-screen-and-or-a-simple-about-info-section",
-      "featureTitle": "Add a stable in-app download link for the Android APK by serving the APK as a static file from the frontend and exposing an English-labeled 'Download Android APK' link from an appropriate screen (e.g., Login screen and/or a simple About/Info section).",
+      "featureId": "feature-allow-an-authenticated-user-to-delete-their-own-posts-from-the-feed-ui-and-persist-the-deletion-in-the-motoko-canister-so-the-deleted-post-does-not-reappear-after-refresh-or-re-login",
+      "featureTitle": "Allow an authenticated user to delete their own posts from the feed UI, and persist the deletion in the Motoko canister so the deleted post does not reappear after refresh or re-login.",
       "files": [
-        "frontend/public/downloads/caffeine-social.apk",
-        "frontend/src/pages/LoginScreen.tsx"
+        "frontend/src/components/posts/PostCard.tsx",
+        "frontend/src/hooks/queries/usePosts.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -81,15 +80,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-25"
+        "REQ-33"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-extend-the-existing-android-apk-documentation-to-include-prerequisites-exact-build-commands-how-to-copy-place-the-built-apk-into-the-static-public-download-path-used-by-the-app-and-how-to-verify-the-apk-opens-without-a-white-screen",
-      "featureTitle": "Update/extend the existing Android APK documentation to include: prerequisites, exact build commands, how to copy/place the built APK into the static public download path used by the app, and how to verify the APK opens without a white screen.",
+      "featureId": "feature-allow-an-authenticated-user-to-delete-their-own-stories-from-the-stories-ui-and-persist-the-deletion-in-the-motoko-canister-so-the-deleted-story-does-not-reappear-after-refresh-or-re-login-even-if-it-has-not-expired",
+      "featureTitle": "Allow an authenticated user to delete their own stories from the stories UI, and persist the deletion in the Motoko canister so the deleted story does not reappear after refresh or re-login (even if it has not expired).",
       "files": [
-        "frontend/capacitor.config.ts"
+        "frontend/src/hooks/queries/useStories.ts",
+        "frontend/src/pages/StoriesPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -101,7 +101,132 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-26"
+        "REQ-34"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-allow-an-authenticated-user-to-delete-their-own-reels-from-the-reels-ui-and-persist-the-deletion-in-the-motoko-canister-so-the-deleted-reel-does-not-reappear-after-refresh-or-re-login",
+      "featureTitle": "Allow an authenticated user to delete their own reels from the reels UI, and persist the deletion in the Motoko canister so the deleted reel does not reappear after refresh or re-login.",
+      "files": [
+        "frontend/src/hooks/queries/useReels.ts",
+        "frontend/src/pages/ReelsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-35"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-extend-the-music-section-to-allow-authenticated-users-to-upload-their-own-audio-files-and-store-the-uploaded-audio-persistently-in-the-motoko-canister-provide-a-list-and-playback-ui-for-the-user-s-uploaded-tracks",
+      "featureTitle": "Extend the Music section to allow authenticated users to upload their own audio files and store the uploaded audio persistently in the Motoko canister; provide a list and playback UI for the user’s uploaded tracks.",
+      "files": [
+        "frontend/src/hooks/queries/useUserTracks.ts",
+        "frontend/src/pages/MusicPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-36"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-global-password-locked-notifications-info-room-that-any-authenticated-user-can-enter-by-providing-the-password-exactly-piyush1618rajput1816-the-room-shows-a-shared-feed-of-notifications-information-related-to-users-and-user-accounts-as-text-entries-stored-persistently-in-the-motoko-canister",
+      "featureTitle": "Implement a global password-locked \"Notifications & Info\" room that any authenticated user can enter by providing the password exactly: \"piyush1618rajput1816\"; the room shows a shared feed of notifications/information related to users and user accounts (as text entries) stored persistently in the Motoko canister.",
+      "files": [
+        "frontend/src/hooks/queries/useNotificationsRoom.ts",
+        "frontend/src/pages/ChatPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-37"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-an-admin-only-control-mode-for-the-global-locked-room-that-is-unlocked-by-entering-the-admin-password-exactly-piyush13775-in-this-control-mode-a-user-can-remove-ban-users-from-the-global-room-so-they-can-no-longer-access-it-even-if-they-know-the-room-password",
+      "featureTitle": "Implement an admin-only control mode for the global locked room that is unlocked by entering the admin password exactly: \"piyush13775\"; in this control mode, a user can remove/ban users from the global room so they can no longer access it even if they know the room password.",
+      "files": [
+        "frontend/src/hooks/queries/useNotificationsRoom.ts",
+        "frontend/src/pages/ChatPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-38"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-support-user-created-private-password-locked-chat-rooms-each-authenticated-user-can-create-a-room-with-a-room-name-and-their-own-password-and-only-users-with-that-password-can-enter-messages-in-these-rooms-must-be-stored-persistently-in-the-motoko-canister",
+      "featureTitle": "Support user-created private password-locked chat rooms: each authenticated user can create a room with a room name and their own password, and only users with that password can enter; messages in these rooms must be stored persistently in the Motoko canister.",
+      "files": [
+        "frontend/src/hooks/queries/usePrivateRooms.ts",
+        "frontend/src/pages/ChatPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-39"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-the-previously-discussed-screenshot-screen-recording-blocking-feature-is-not-implemented-skipped-do-not-add-any-fake-screenshot-attempt-buttons-or-popups",
+      "featureTitle": "Ensure the previously discussed screenshot/screen-recording blocking feature is not implemented (skipped). Do not add any fake \"screenshot attempt\" buttons or popups.",
+      "files": [
+        "frontend/src/docs/nonGoals.md"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-40"
       ],
       "confidence": "high"
     }

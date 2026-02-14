@@ -19,6 +19,7 @@ export const _CaffeineStorageRefillResult = IDL.Record({
   'success' : IDL.Opt(IDL.Bool),
   'topped_up_amount' : IDL.Opt(IDL.Nat),
 });
+export const UserId = IDL.Principal;
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
@@ -26,9 +27,8 @@ export const UserRole = IDL.Variant({
 });
 export const ExternalBlob = IDL.Vec(IDL.Nat8);
 export const PostId = IDL.Text;
-export const UserId = IDL.Principal;
 export const Time = IDL.Int;
-export const Data__3 = IDL.Record({
+export const Data__4 = IDL.Record({
   'id' : PostId,
   'author' : UserId,
   'timestamp' : Time,
@@ -36,7 +36,7 @@ export const Data__3 = IDL.Record({
   'image' : IDL.Opt(ExternalBlob),
 });
 export const ReelId = IDL.Text;
-export const Data__2 = IDL.Record({
+export const Data__3 = IDL.Record({
   'id' : ReelId,
   'title' : IDL.Text,
   'video' : IDL.Opt(ExternalBlob),
@@ -45,7 +45,7 @@ export const Data__2 = IDL.Record({
   'timestamp' : Time,
 });
 export const StoryId = IDL.Text;
-export const Data__1 = IDL.Record({
+export const Data__2 = IDL.Record({
   'id' : StoryId,
   'text' : IDL.Text,
   'author' : UserId,
@@ -60,11 +60,30 @@ export const UserProfile = IDL.Record({
   'avatar' : IDL.Opt(ExternalBlob),
 });
 export const MessageId = IDL.Text;
-export const Data = IDL.Record({
+export const Data__5 = IDL.Record({
+  'id' : MessageId,
+  'text' : IDL.Text,
+  'author' : UserId,
+  'timestamp' : Time,
+});
+export const Data__1 = IDL.Record({
   'id' : MessageId,
   'content' : IDL.Text,
   'recipient' : UserId,
   'sender' : UserId,
+  'timestamp' : Time,
+});
+export const Notification = IDL.Record({
+  'content' : IDL.Text,
+  'sender' : UserId,
+  'timestamp' : Time,
+});
+export const TrackId = IDL.Text;
+export const Data = IDL.Record({
+  'id' : TrackId,
+  'title' : IDL.Text,
+  'audio' : ExternalBlob,
+  'author' : UserId,
   'timestamp' : Time,
 });
 
@@ -96,31 +115,52 @@ export const idlService = IDL.Service({
     ),
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'addChatRoomMessage' : IDL.Func([UserId, IDL.Text], [], []),
+  'addNotification' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'createPost' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__3], []),
+  'banUserFromNotificationsRoom' : IDL.Func([IDL.Text, UserId], [], []),
+  'createPost' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__4], []),
+  'createPrivateChatRoom' : IDL.Func([IDL.Text], [], []),
   'createReel' : IDL.Func(
       [IDL.Text, IDL.Opt(ExternalBlob), IDL.Opt(IDL.Text)],
-      [Data__2],
+      [Data__3],
       [],
     ),
-  'createStory' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__1], []),
-  'getActiveStories' : IDL.Func([], [IDL.Vec(Data__1)], ['query']),
+  'createStory' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__2], []),
+  'deletePost' : IDL.Func([PostId], [], []),
+  'deleteReel' : IDL.Func([ReelId], [], []),
+  'deleteStory' : IDL.Func([StoryId], [], []),
+  'enterNotificationsRoom' : IDL.Func([IDL.Text], [], []),
+  'enterNotificationsRoomAdminMode' : IDL.Func([IDL.Text], [], []),
+  'enterPrivateChatRoom' : IDL.Func([UserId, IDL.Text], [], []),
+  'getActiveStories' : IDL.Func([], [IDL.Vec(Data__2)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getMessage' : IDL.Func([MessageId], [IDL.Opt(Data)], ['query']),
-  'getMessages' : IDL.Func([UserId], [IDL.Vec(Data)], ['query']),
-  'getPosts' : IDL.Func([], [IDL.Vec(Data__3)], ['query']),
-  'getReels' : IDL.Func([], [IDL.Vec(Data__2)], ['query']),
-  'getStory' : IDL.Func([StoryId], [IDL.Opt(Data__1)], ['query']),
+  'getChatRoomMessages' : IDL.Func([UserId], [IDL.Vec(Data__5)], ['query']),
+  'getFameLevel' : IDL.Func([], [IDL.Nat], ['query']),
+  'getMessage' : IDL.Func([MessageId], [IDL.Opt(Data__1)], ['query']),
+  'getMessages' : IDL.Func([UserId], [IDL.Vec(Data__1)], ['query']),
+  'getNotificationsRoomEntries' : IDL.Func(
+      [],
+      [IDL.Vec(Notification)],
+      ['query'],
+    ),
+  'getPosts' : IDL.Func([], [IDL.Vec(Data__4)], ['query']),
+  'getPrivacySetting' : IDL.Func([], [IDL.Text], ['query']),
+  'getReels' : IDL.Func([], [IDL.Vec(Data__3)], ['query']),
+  'getStory' : IDL.Func([StoryId], [IDL.Opt(Data__2)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getUserTracks' : IDL.Func([UserId], [IDL.Vec(Data)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'searchUsernames' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
-  'sendMessage' : IDL.Func([IDL.Principal, IDL.Text], [Data], []),
+  'sendMessage' : IDL.Func([IDL.Principal, IDL.Text], [Data__1], []),
+  'unbanUserFromNotificationsRoom' : IDL.Func([IDL.Text, UserId], [], []),
+  'uploadTrack' : IDL.Func([IDL.Text, ExternalBlob], [Data], []),
 });
 
 export const idlInitArgs = [];
@@ -137,6 +177,7 @@ export const idlFactory = ({ IDL }) => {
     'success' : IDL.Opt(IDL.Bool),
     'topped_up_amount' : IDL.Opt(IDL.Nat),
   });
+  const UserId = IDL.Principal;
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
@@ -144,9 +185,8 @@ export const idlFactory = ({ IDL }) => {
   });
   const ExternalBlob = IDL.Vec(IDL.Nat8);
   const PostId = IDL.Text;
-  const UserId = IDL.Principal;
   const Time = IDL.Int;
-  const Data__3 = IDL.Record({
+  const Data__4 = IDL.Record({
     'id' : PostId,
     'author' : UserId,
     'timestamp' : Time,
@@ -154,7 +194,7 @@ export const idlFactory = ({ IDL }) => {
     'image' : IDL.Opt(ExternalBlob),
   });
   const ReelId = IDL.Text;
-  const Data__2 = IDL.Record({
+  const Data__3 = IDL.Record({
     'id' : ReelId,
     'title' : IDL.Text,
     'video' : IDL.Opt(ExternalBlob),
@@ -163,7 +203,7 @@ export const idlFactory = ({ IDL }) => {
     'timestamp' : Time,
   });
   const StoryId = IDL.Text;
-  const Data__1 = IDL.Record({
+  const Data__2 = IDL.Record({
     'id' : StoryId,
     'text' : IDL.Text,
     'author' : UserId,
@@ -178,11 +218,30 @@ export const idlFactory = ({ IDL }) => {
     'avatar' : IDL.Opt(ExternalBlob),
   });
   const MessageId = IDL.Text;
-  const Data = IDL.Record({
+  const Data__5 = IDL.Record({
+    'id' : MessageId,
+    'text' : IDL.Text,
+    'author' : UserId,
+    'timestamp' : Time,
+  });
+  const Data__1 = IDL.Record({
     'id' : MessageId,
     'content' : IDL.Text,
     'recipient' : UserId,
     'sender' : UserId,
+    'timestamp' : Time,
+  });
+  const Notification = IDL.Record({
+    'content' : IDL.Text,
+    'sender' : UserId,
+    'timestamp' : Time,
+  });
+  const TrackId = IDL.Text;
+  const Data = IDL.Record({
+    'id' : TrackId,
+    'title' : IDL.Text,
+    'audio' : ExternalBlob,
+    'author' : UserId,
     'timestamp' : Time,
   });
   
@@ -214,31 +273,52 @@ export const idlFactory = ({ IDL }) => {
       ),
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'addChatRoomMessage' : IDL.Func([UserId, IDL.Text], [], []),
+    'addNotification' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'createPost' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__3], []),
+    'banUserFromNotificationsRoom' : IDL.Func([IDL.Text, UserId], [], []),
+    'createPost' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__4], []),
+    'createPrivateChatRoom' : IDL.Func([IDL.Text], [], []),
     'createReel' : IDL.Func(
         [IDL.Text, IDL.Opt(ExternalBlob), IDL.Opt(IDL.Text)],
-        [Data__2],
+        [Data__3],
         [],
       ),
-    'createStory' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__1], []),
-    'getActiveStories' : IDL.Func([], [IDL.Vec(Data__1)], ['query']),
+    'createStory' : IDL.Func([IDL.Text, IDL.Opt(ExternalBlob)], [Data__2], []),
+    'deletePost' : IDL.Func([PostId], [], []),
+    'deleteReel' : IDL.Func([ReelId], [], []),
+    'deleteStory' : IDL.Func([StoryId], [], []),
+    'enterNotificationsRoom' : IDL.Func([IDL.Text], [], []),
+    'enterNotificationsRoomAdminMode' : IDL.Func([IDL.Text], [], []),
+    'enterPrivateChatRoom' : IDL.Func([UserId, IDL.Text], [], []),
+    'getActiveStories' : IDL.Func([], [IDL.Vec(Data__2)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getMessage' : IDL.Func([MessageId], [IDL.Opt(Data)], ['query']),
-    'getMessages' : IDL.Func([UserId], [IDL.Vec(Data)], ['query']),
-    'getPosts' : IDL.Func([], [IDL.Vec(Data__3)], ['query']),
-    'getReels' : IDL.Func([], [IDL.Vec(Data__2)], ['query']),
-    'getStory' : IDL.Func([StoryId], [IDL.Opt(Data__1)], ['query']),
+    'getChatRoomMessages' : IDL.Func([UserId], [IDL.Vec(Data__5)], ['query']),
+    'getFameLevel' : IDL.Func([], [IDL.Nat], ['query']),
+    'getMessage' : IDL.Func([MessageId], [IDL.Opt(Data__1)], ['query']),
+    'getMessages' : IDL.Func([UserId], [IDL.Vec(Data__1)], ['query']),
+    'getNotificationsRoomEntries' : IDL.Func(
+        [],
+        [IDL.Vec(Notification)],
+        ['query'],
+      ),
+    'getPosts' : IDL.Func([], [IDL.Vec(Data__4)], ['query']),
+    'getPrivacySetting' : IDL.Func([], [IDL.Text], ['query']),
+    'getReels' : IDL.Func([], [IDL.Vec(Data__3)], ['query']),
+    'getStory' : IDL.Func([StoryId], [IDL.Opt(Data__2)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getUserTracks' : IDL.Func([UserId], [IDL.Vec(Data)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'searchUsernames' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
-    'sendMessage' : IDL.Func([IDL.Principal, IDL.Text], [Data], []),
+    'sendMessage' : IDL.Func([IDL.Principal, IDL.Text], [Data__1], []),
+    'unbanUserFromNotificationsRoom' : IDL.Func([IDL.Text, UserId], [], []),
+    'uploadTrack' : IDL.Func([IDL.Text, ExternalBlob], [Data], []),
   });
 };
 

@@ -1,13 +1,18 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
-  "summary": "Build an Instagram-like social app (web + Android APK) for a friend group with user accounts, account search, 1:1 chat, posts, stories, reels, persistent storage of uploaded content and messages, plus extra sections for games, music, study whiteboard/PPT tool, AI image generation, AI writing, and a small chatbot, with a custom branded header and logo.",
+  "projectStateVersion": 13,
+  "summary": "Build an Instagram-like social app (web + Android APK) with user accounts, account search, 1:1 chat, posts/stories/reels with persistent storage, plus games, music, study tools, AI tools, and a chatbot; update UI to be mobile-like with a simplified header (single line) and a horizontal functional-button menu; add password-locked rooms (notification room + admin controls), user music uploads, and allow users to delete their own content.",
   "architectural_notes": [
     "App must persist user-uploaded media (posts/stories/reels) and chat history so it reappears after re-login.",
     "Requires authentication + user identity system and storage backend for media and messages.",
     "Deliver both web deployment and Android APK build pipeline as part of deliverables.",
     "Add mobile-first responsive design and touch-friendly UI patterns so the web app behaves like a mobile app on phones (navigation, layouts, tap targets).",
-    "Header must display the exact user-requested creator line: \"created by Piyush Singh for Jay Yash Anus Sohan Harsh Abhay\" (spelling and spacing as specified)."
+    "Header requirement updated: replace previous required header lines with a single line exactly \"created by Piyush Singh\" and render the text in black.",
+    "Add a horizontally-scrollable functional menu bar below the header for quick access to: Whiteboard, AI Image Generation, AI Writing, Chatbot.",
+    "Implement password-gated rooms: a global room accessible via password for notifications/info, plus a separate admin-password gate (\"piyush13775\") that enables user moderation (remove users).",
+    "Music section must support user audio uploads with persistent storage.",
+    "Deletion permissions: users can delete only their own posts/stories/reels (owner-only).",
+    "Support both a global password room and user-created password-protected private rooms."
   ],
   "known_issues": [
     "App is not loading for the user (needs investigation and fix)."
@@ -213,6 +218,94 @@
         "REQ-26"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-top-application-header-to-replace-the-existing-multi-line-header-text-with-a-single-line-exactly-created-by-piyush-singh-and-ensure-the-header-text-color-is-black",
+      "title": "Update the top application header to replace the existing multi-line header text with a single line exactly: \"created by Piyush Singh\" and ensure the header text color is black.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-currently-logged-in-user-s-username-in-the-header-area-and-display-the-static-line-inbox-owner-in-your-account-followed-by-the-static-username-psrpiyush-directly-below-it",
+      "title": "Display the currently logged-in user’s username in the header area, and display the static line \"Inbox owner in your account\" followed by the static username \"psrpiyush\" directly below it.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-horizontal-horizontally-scrollable-functional-button-bar-directly-below-the-header-that-contains-exactly-these-buttons-whiteboard-ai-image-generation-ai-writing-and-chatbot-only-this-functional-button-row-should-be-horizontally-scrollable",
+      "title": "Add a horizontal, horizontally-scrollable functional button bar directly below the header that contains exactly these buttons: \"Whiteboard\", \"AI Image Generation\", \"AI Writing\", and \"Chatbot\". Only this functional button row should be horizontally scrollable.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-allow-an-authenticated-user-to-delete-their-own-posts-from-the-feed-ui-and-persist-the-deletion-in-the-motoko-canister-so-the-deleted-post-does-not-reappear-after-refresh-or-re-login",
+      "title": "Allow an authenticated user to delete their own posts from the feed UI, and persist the deletion in the Motoko canister so the deleted post does not reappear after refresh or re-login.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-allow-an-authenticated-user-to-delete-their-own-stories-from-the-stories-ui-and-persist-the-deletion-in-the-motoko-canister-so-the-deleted-story-does-not-reappear-after-refresh-or-re-login-even-if-it-has-not-expired",
+      "title": "Allow an authenticated user to delete their own stories from the stories UI, and persist the deletion in the Motoko canister so the deleted story does not reappear after refresh or re-login (even if it has not expired).",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-allow-an-authenticated-user-to-delete-their-own-reels-from-the-reels-ui-and-persist-the-deletion-in-the-motoko-canister-so-the-deleted-reel-does-not-reappear-after-refresh-or-re-login",
+      "title": "Allow an authenticated user to delete their own reels from the reels UI, and persist the deletion in the Motoko canister so the deleted reel does not reappear after refresh or re-login.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-music-section-to-allow-authenticated-users-to-upload-their-own-audio-files-and-store-the-uploaded-audio-persistently-in-the-motoko-canister-provide-a-list-and-playback-ui-for-the-user-s-uploaded-tracks",
+      "title": "Extend the Music section to allow authenticated users to upload their own audio files and store the uploaded audio persistently in the Motoko canister; provide a list and playback UI for the user’s uploaded tracks.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-global-password-locked-notifications-info-room-that-any-authenticated-user-can-enter-by-providing-the-password-exactly-piyush1618rajput1816-the-room-shows-a-shared-feed-of-notifications-information-related-to-users-and-user-accounts-as-text-entries-stored-persistently-in-the-motoko-canister",
+      "title": "Implement a global password-locked \"Notifications & Info\" room that any authenticated user can enter by providing the password exactly: \"piyush1618rajput1816\"; the room shows a shared feed of notifications/information related to users and user accounts (as text entries) stored persistently in the Motoko canister.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-admin-only-control-mode-for-the-global-locked-room-that-is-unlocked-by-entering-the-admin-password-exactly-piyush13775-in-this-control-mode-a-user-can-remove-ban-users-from-the-global-room-so-they-can-no-longer-access-it-even-if-they-know-the-room-password",
+      "title": "Implement an admin-only control mode for the global locked room that is unlocked by entering the admin password exactly: \"piyush13775\"; in this control mode, a user can remove/ban users from the global room so they can no longer access it even if they know the room password.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-support-user-created-private-password-locked-chat-rooms-each-authenticated-user-can-create-a-room-with-a-room-name-and-their-own-password-and-only-users-with-that-password-can-enter-messages-in-these-rooms-must-be-stored-persistently-in-the-motoko-canister",
+      "title": "Support user-created private password-locked chat rooms: each authenticated user can create a room with a room name and their own password, and only users with that password can enter; messages in these rooms must be stored persistently in the Motoko canister.",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-previously-discussed-screenshot-screen-recording-blocking-feature-is-not-implemented-skipped-do-not-add-any-fake-screenshot-attempt-buttons-or-popups",
+      "title": "Ensure the previously discussed screenshot/screen-recording blocking feature is not implemented (skipped). Do not add any fake \"screenshot attempt\" buttons or popups.",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -315,12 +408,6 @@
       "status": "pending"
     },
     {
-      "id": "AR-29",
-      "summary": "Update the top header text to include the exact line: \"created by Piyush Singh for Jay Yash Anus Sohan Harsh Abhay\"",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
       "id": "AR-30",
       "summary": "Provide a built Android APK file as an explicit deliverable/download (release-ready build artifact)",
       "reqIds": [],
@@ -329,6 +416,66 @@
     {
       "id": "AR-31",
       "summary": "Fix: App is not loading (investigate and resolve so the deployed build opens correctly)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Produce a fresh, installable Android APK build for the current app using the existing Capacitor Android project, and include the resulting APK in the repository at the exact static path `frontend/public/downloads/caffeine-social.apk` (replacing the existing file if needed).",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Verify and keep the in-app APK download flow working from the logged-out experience by ensuring the \"Download Android APK\" action downloads `/downloads/caffeine-social.apk` successfully in production builds.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Update/complete the Android APK build documentation in `frontend/ANDROID_APK.md` so it contains end-to-end, copy-pastable steps (prerequisites, exact commands, where the release APK output is located, and how to copy it into `frontend/public/downloads/caffeine-social.apk`) and includes a short verification checklist for confirming the APK opens correctly.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Replace existing multi-line header text with a single header line: \"created by Piyush Singh\" (text color black)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Add a horizontal, horizontally-scrollable functional button bar below the header for: Whiteboard, AI Image Generation, AI Writing, Chatbot",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Add password-locked rooms: (1) a global notification/info room accessible to all users with a password, and (2) an admin-only control room unlocked by admin password \"piyush13775\" that can remove users",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Extend Music section to allow users to upload their own audio files (persistent storage)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-39",
+      "summary": "Allow users to delete their own content: posts, reels, and stories (owner-only deletion)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-40",
+      "summary": "Support user-created private locked chat rooms (each user can create a password-protected room) in addition to the global password room",
       "reqIds": [],
       "status": "pending"
     }

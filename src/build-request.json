@@ -1,109 +1,232 @@
 {
   "kind": "build_request",
-  "title": "Fix app not loading and provide Android APK download link",
-  "priority": "high",
+  "title": "Add locked rooms, user music uploads, owner-only deletion, and updated header/menu",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-22",
-      "text": "Investigate and fix the 'app is not loading' issue so the deployed web app reliably renders the login screen for logged-out users and the main app layout for logged-in users, without getting stuck on an infinite loading spinner or a blank screen.",
+      "id": "REQ-30",
+      "text": "Update the top application header to replace the existing multi-line header text with a single line exactly: \"created by Piyush Singh\" and ensure the header text color is black.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "add ... and on header write \"create by Piyush Singh\" in block black colour",
+          "User: B"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On all authenticated screens, the header displays only one line of text: \"created by Piyush Singh\".",
+        "The header text is rendered in black (not muted/gray and not theme-dependent).",
+        "The previous two header lines are no longer shown anywhere in the header."
+      ]
+    },
+    {
+      "id": "REQ-31",
+      "text": "Display the currently logged-in user’s username in the header area, and display the static line \"Inbox owner in your account\" followed by the static username \"psrpiyush\" directly below it.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "should it show each user’s own username And below it inbox owner in your account \"psrpiyush\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "When logged in and the caller has a saved profile, the header shows the user’s profile username.",
+        "The header also shows the static text \"Inbox owner in your account\" and the static value \"psrpiyush\" below it.",
+        "If the user profile is not yet available, the UI shows an English placeholder (e.g., \"Username: (not set)\") without crashing."
+      ]
+    },
+    {
+      "id": "REQ-32",
+      "text": "Add a horizontal, horizontally-scrollable functional button bar directly below the header that contains exactly these buttons: \"Whiteboard\", \"AI Image Generation\", \"AI Writing\", and \"Chatbot\". Only this functional button row should be horizontally scrollable.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-3"
+        ],
+        "quotes": [
+          "Below it the five functional button ... \"whiteboard, AI image generation, AI writing, a small chatbot\"",
+          "We can scroll functional button horizontally also but only functional button"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A button row is rendered below the header on authenticated screens.",
+        "The button row can be scrolled horizontally on small screens (overflow-x enabled) while the rest of the page does not horizontally scroll.",
+        "Tapping each button navigates to the existing corresponding feature screen (Whiteboard, Image Generator, AI Writing Tool, Local Chatbot).",
+        "All button labels are in English exactly as specified."
+      ]
+    },
+    {
+      "id": "REQ-33",
+      "text": "Allow an authenticated user to delete their own posts from the feed UI, and persist the deletion in the Motoko canister so the deleted post does not reappear after refresh or re-login.",
       "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "The app is not loading fixed of problem"
+          "We can also able to delete our posted feet reel and story"
         ]
       },
       "acceptanceCriteria": [
-        "Opening the deployed web app on a fresh browser session shows the Login screen within 5 seconds (no blank screen).",
-        "After signing in with Internet Identity, the app navigates into the authenticated experience and renders content (e.g., Feed) without being stuck on 'Loading...'.",
-        "If backend/actor initialization fails for any reason, the UI shows an English error state with a retry action instead of spinning indefinitely.",
-        "No uncaught exceptions appear in the browser console during initial load, login, and first navigation."
+        "A delete action is available on post items in the feed UI for the post owner only.",
+        "Attempting to delete another user’s post fails with a clear English error message.",
+        "After deleting a post, it disappears from the feed without requiring a full page reload and does not reappear after re-login.",
+        "Backend enforces owner-only deletion."
       ]
     },
     {
-      "id": "REQ-23",
-      "text": "Harden frontend startup and actor initialization so that access-control/initialization calls do not block app rendering when optional secrets are missing, and failures are handled gracefully with an actionable English error message.",
-      "target": "frontend",
+      "id": "REQ-34",
+      "text": "Allow an authenticated user to delete their own stories from the stories UI, and persist the deletion in the Motoko canister so the deleted story does not reappear after refresh or re-login (even if it has not expired).",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "The app is not loading fixed of problem"
+          "We can also able to delete our posted feet reel and story"
         ]
       },
       "acceptanceCriteria": [
-        "When no admin token/secret is present, the app still loads and authentication flows work (no initialization-related crash or infinite spinner).",
-        "When initialization fails (simulated by forcing an error), the app shows an English error UI with a retry button that re-attempts initialization.",
-        "The login screen remains accessible even if anonymous actor creation/initialization fails (i.e., the user is not blocked from seeing the login UI)."
+        "A delete action is available on story items for the story owner only.",
+        "Attempting to delete another user’s story fails with a clear English error message.",
+        "After deleting a story, it no longer appears in the active stories list and does not reappear after re-login.",
+        "Backend enforces owner-only deletion."
       ]
     },
     {
-      "id": "REQ-24",
-      "text": "Produce an Android APK build artifact from this repository using the existing Capacitor Android setup, and include it in the deliverables in a clearly documented location in the repo.",
-      "target": "frontend",
+      "id": "REQ-35",
+      "text": "Allow an authenticated user to delete their own reels from the reels UI, and persist the deletion in the Motoko canister so the deleted reel does not reappear after refresh or re-login.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "give it to me apk file"
+          "We can also able to delete our posted feet reel and story"
         ]
       },
       "acceptanceCriteria": [
-        "A successfully built APK (debug or release) is generated via documented steps in this repo and can be installed on an Android device/emulator.",
-        "The repo documentation clearly states the exact output path(s) where the generated APK can be found after the build completes.",
-        "The Android build uses the existing Capacitor configuration and builds the current web app version (no missing assets / white screen on launch)."
+        "A delete action is available on reel items for the reel owner only.",
+        "Attempting to delete another user’s reel fails with a clear English error message.",
+        "After deleting a reel, it no longer appears in the reels list and does not reappear after re-login.",
+        "Backend enforces owner-only deletion."
       ]
     },
     {
-      "id": "REQ-25",
-      "text": "Add a stable in-app download link for the Android APK by serving the APK as a static file from the frontend and exposing an English-labeled 'Download Android APK' link from an appropriate screen (e.g., Login screen and/or a simple About/Info section).",
-      "target": "frontend",
+      "id": "REQ-36",
+      "text": "Extend the Music section to allow authenticated users to upload their own audio files and store the uploaded audio persistently in the Motoko canister; provide a list and playback UI for the user’s uploaded tracks.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-2"
         ],
         "quotes": [
-          "and download link"
+          "add a section where we can also upload music",
+          "upload their own audio files"
         ]
       },
       "acceptanceCriteria": [
-        "The APK file is placed under a static public path (e.g., within frontend/public) so it is downloadable from the deployed web site.",
-        "The UI displays an English 'Download Android APK' link that downloads the APK when clicked.",
-        "The download link remains visible/accessible even if the user is not logged in."
+        "Music page includes an upload control that accepts common audio formats (at minimum: audio/*).",
+        "Uploaded audio is stored in the canister and remains available after refresh and re-login.",
+        "Users can see a list of their uploaded tracks and play them in-app.",
+        "Uploading and playback errors are shown in actionable English messages (no silent failures)."
       ]
     },
     {
-      "id": "REQ-26",
-      "text": "Update/extend the existing Android APK documentation to include: prerequisites, exact build commands, how to copy/place the built APK into the static public download path used by the app, and how to verify the APK opens without a white screen.",
-      "target": "frontend",
+      "id": "REQ-37",
+      "text": "Implement a global password-locked \"Notifications & Info\" room that any authenticated user can enter by providing the password exactly: \"piyush1618rajput1816\"; the room shows a shared feed of notifications/information related to users and user accounts (as text entries) stored persistently in the Motoko canister.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-0"
         ],
         "quotes": [
-          "give it to me apk file and download link"
+          "For the password‑protected group (password: piyush1618rajput1816)",
+          "it show all notification and information related to all user available on that application and there user account"
         ]
       },
       "acceptanceCriteria": [
-        "Documentation provides step-by-step commands to build the web app, sync Capacitor, and build the Android APK.",
-        "Documentation explains how to publish the APK for web download (static file placement + resulting URL).",
-        "Documentation includes a verification checklist for both web load and Android app load (ensuring the app is not stuck loading)."
+        "There is a UI entry point to open the global \"Notifications & Info\" room that prompts for the password.",
+        "Entering password \"piyush1618rajput1816\" grants access; any other password is rejected with an English error message.",
+        "The room contains a shared, persistent text feed visible to all users who enter the room.",
+        "Entries in the feed persist across refresh and re-login."
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "text": "Implement an admin-only control mode for the global locked room that is unlocked by entering the admin password exactly: \"piyush13775\"; in this control mode, a user can remove/ban users from the global room so they can no longer access it even if they know the room password.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "one single global admin-only group ... someone enter this password \"piyush13775\" They also get access to control who stays or who is removed"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Within the global locked room UI, there is a separate admin unlock flow requiring password \"piyush13775\".",
+        "After admin unlock, the UI shows controls to remove/ban a selected user from the global room.",
+        "A banned user cannot re-enter the global room even with password \"piyush1618rajput1816\".",
+        "All admin actions and ban state persist across refresh and re-login.",
+        "Non-admin users cannot see or use admin controls unless they enter the admin password."
+      ]
+    },
+    {
+      "id": "REQ-39",
+      "text": "Support user-created private password-locked chat rooms: each authenticated user can create a room with a room name and their own password, and only users with that password can enter; messages in these rooms must be stored persistently in the Motoko canister.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "both",
+          "One global password room for everyone, AND Each user can also create their own private password‑protected room? User: 1. Yes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can create a private locked room by providing a room name and password.",
+        "Users can join an existing private locked room by providing the correct password.",
+        "Private room messages persist across refresh and re-login.",
+        "Only users with the password can access the room’s messages; wrong passwords are rejected with an English error message."
+      ]
+    },
+    {
+      "id": "REQ-40",
+      "text": "Ensure the previously discussed screenshot/screen-recording blocking feature is not implemented (skipped). Do not add any fake \"screenshot attempt\" buttons or popups.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "1.skip this feature"
+        ]
+      },
+      "acceptanceCriteria": [
+        "No UI elements or logic exist that claim to block screenshots/screen recording or prompt for a screenshot code.",
+        "No user-facing text references screenshot blocking or a screenshot PIN code."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo if an upgrade requires conditional state migration.",
-    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or anything in frontend/src/components/ui; compose or add new code around them instead.",
-    "All user-facing UI text must be in English."
+    "Backend must remain a single Motoko actor with all logic in backend/main.mo (no additional backend services).",
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or any files under frontend/src/components/ui.",
+    "All user-facing UI text must be in English.",
+    "Do not implement screenshot/screen-recording blocking (feature explicitly skipped)."
   ],
   "nonGoals": [
-    "Adding new social features beyond fixing loading, packaging, and providing an APK download link.",
-    "Integrating third-party hosting services for the APK download link (the link must be served from the app’s own static assets).",
-    "Adding non-Internet-Identity authentication providers."
+    "Adding third-party authentication providers (only Internet Identity is allowed).",
+    "Integrating external databases or external file storage for audio uploads.",
+    "Implementing real-time messaging via WebSockets (not supported).",
+    "Deleting or disabling Internet Identity login flow."
   ],
   "imageRequirements": {
     "required": [],
