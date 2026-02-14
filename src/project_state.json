@@ -1,0 +1,225 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build an Instagram-like social app (web + Android APK) for a friend group with user accounts, account search, 1:1 chat, posts, stories, reels, persistent storage of uploaded content and messages, plus extra sections for games, music, study whiteboard/PPT tool, AI image generation, AI writing, and a small chatbot, with a custom branded header and logo.",
+  "architectural_notes": [
+    "App must persist user-uploaded media (posts/stories/reels) and chat history so it reappears after re-login.",
+    "Requires authentication + user identity system and storage backend for media and messages.",
+    "Deliver both web deployment and Android APK build pipeline as part of deliverables."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Minimal flat logo mark (caffeine-social-logo.dim_256x256.png)\n- Wide header logo lockup with textless icon variant (caffeine-social-logo-wide.dim_800x200.png)\n- App favicon-style icon (caffeine-social-favicon.dim_64x64.png)",
+  "existing_features": [
+    {
+      "id": "feature-add-authentication-using-internet-identity-and-create-an-in-app-user-profile-model-stored-in-the-motoko-canister-display-name-username-handle-optional-bio-optional-avatar-image-on-first-login-prompt-the-user-to-create-complete-their-profile-on-subsequent-logins-load-their-existing-profile",
+      "title": "Add authentication using Internet Identity and create an in-app user profile model stored in the Motoko canister (display name, username/handle, optional bio, optional avatar image). On first login, prompt the user to create/complete their profile; on subsequent logins, load their existing profile.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-user-discovery-provide-an-account-search-screen-that-can-find-profiles-by-username-handle-and-allow-initiating-a-1-1-chat-with-a-selected-user",
+      "title": "Implement user discovery: provide an account search screen that can find profiles by username/handle and allow initiating a 1:1 chat with a selected user.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-1-1-chat-with-persistent-message-history-stored-in-the-motoko-canister-the-chat-ui-must-support-sending-text-messages-and-viewing-conversation-history-and-it-must-work-across-logins-messages-reappear-after-re-authentication",
+      "title": "Implement 1:1 chat with persistent message history stored in the Motoko canister. The chat UI must support sending text messages and viewing conversation history, and it must work across logins (messages reappear after re-authentication).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-posts-instagram-like-feed-allow-authenticated-users-to-create-posts-containing-caption-text-and-an-optional-image-upload-store-posts-and-images-in-the-motoko-canister-and-render-a-feed-with-newest-first-ordering",
+      "title": "Implement posts (Instagram-like feed): allow authenticated users to create posts containing caption text and an optional image upload; store posts and images in the Motoko canister and render a feed with newest-first ordering.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-stories-allow-authenticated-users-to-create-a-story-with-optional-image-and-short-text-store-and-list-stories-in-the-motoko-canister-and-provide-a-stories-viewer-ui-stories-must-persist-across-logins",
+      "title": "Implement Stories: allow authenticated users to create a story with optional image and short text; store and list stories in the Motoko canister, and provide a stories viewer UI. Stories must persist across logins.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-reels-short-form-media-as-an-mvp-allow-authenticated-users-to-create-a-reel-entry-with-a-title-caption-and-either-a-an-uploaded-small-video-or-b-a-link-field-if-video-storage-is-not-feasible-within-canister-limits-store-reel-metadata-in-the-motoko-canister-and-show-a-reels-list-viewer-reels-must-persist-across-logins",
+      "title": "Implement Reels (short-form media) as an MVP: allow authenticated users to create a reel entry with a title/caption and either (a) an uploaded small video OR (b) a link field if video storage is not feasible within canister limits; store reel metadata in the Motoko canister and show a reels list/viewer. Reels must persist across logins.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-top-application-header-present-across-all-sections-with-1-a-left-aligned-logo-image-and-2-the-exact-text-owner-piyush-singh-for-yash-jay-anush-harsh-abhay-all-user-facing-ui-text-must-be-in-english",
+      "title": "Add a top application header present across all sections with: (1) a left-aligned logo image and (2) the exact text: \"owner Piyush Singh for Yash Jay Anush Harsh Abhay\". All user-facing UI text must be in English.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-games-section-containing-at-least-five-distinct-mini-games-that-run-fully-in-the-browser-without-external-services-e-g-tic-tac-toe-memory-match-snake-2048-and-a-simple-quiz",
+      "title": "Add a Games section containing at least five distinct mini-games that run fully in the browser without external services (e.g., Tic-Tac-Toe, Memory Match, Snake, 2048, and a simple Quiz).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-music-section-that-provides-a-local-offline-ready-music-library-ui-using-bundled-audio-files-and-metadata-title-artist-region-tags-like-india-pakistan-include-a-clear-way-to-browse-and-play-tracks-within-the-app",
+      "title": "Add a Music section that provides a local, offline-ready music library UI using bundled audio files and metadata (title, artist, region tags like India/Pakistan). Include a clear way to browse and play tracks within the app.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-study-tools-section-with-a-a-whiteboard-tool-freehand-drawing-colors-eraser-clear-board-export-to-png-and-b-a-simple-ppt-like-slide-tool-create-slides-add-text-blocks-reorder-slides-present-preview",
+      "title": "Add a Study Tools section with (A) a whiteboard tool (freehand drawing, colors, eraser, clear board, export to PNG) and (B) a simple PPT-like slide tool (create slides, add text blocks, reorder slides, present/preview).",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-ai-tools-section-containing-a-an-ai-writing-tool-implemented-as-on-device-non-llm-helpers-templates-tone-transforms-summarization-style-heuristics-and-b-an-image-generator-implemented-as-a-local-canvas-based-generator-e-g-pattern-gradient-shape-composition-that-can-export-generated-images-to-png-no-third-party-ai-apis-may-be-used",
+      "title": "Add an \"AI Tools\" section containing: (A) an AI Writing tool implemented as on-device, non-LLM helpers (templates, tone transforms, summarization-style heuristics) and (B) an Image Generator implemented as a local canvas-based generator (e.g., pattern/gradient/shape composition) that can export generated images to PNG. No third-party AI APIs may be used.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-small-in-app-chatbot-implemented-as-a-local-rules-based-assistant-faq-style-command-shortcuts-to-navigate-features-available-from-the-ai-tools-section",
+      "title": "Add a small in-app chatbot implemented as a local rules-based assistant (FAQ-style + command shortcuts to navigate features) available from the AI Tools section.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-coherent-distinctive-visual-theme-for-the-app-colors-typography-spacing-and-component-styling-and-apply-it-consistently-across-all-sections-do-not-use-a-blue-purple-theme",
+      "title": "Create a coherent, distinctive visual theme for the app (colors, typography, spacing, and component styling) and apply it consistently across all sections. Do not use a blue/purple theme.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-static-assets-integration-for-generated-images-and-brand-assets-place-generated-images-in-frontend-public-assets-generated-and-ensure-the-header-logo-loads-from-there",
+      "title": "Add a static-assets integration for generated images and brand assets: place generated images in frontend/public/assets/generated and ensure the header logo loads from there.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "User accounts: sign up/login and persistent user profiles",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Account search to find users and start chats",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "1:1 chat with message persistence across logins",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Create/view posts with media upload and persistent storage",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Stories feature (create/view) with persistent storage",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Reels feature (create/view) with persistent storage",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Games section with at least five game types",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Music section with many Indian songs and popular Pakistani songs",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Study tools section: whiteboard and PPT-like study tool",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "AI image generation section",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "AI writing section (generate text/content)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Small chatbot feature",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Custom header with text \"owner Piyush Singh for Yash Jay Anush Harsh Abhay\" and a logo on the left",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Deliverables: source code + built Android APK + hosted website link",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Persist uploaded media (avatars, post images, story images, and any reel media if supported) and all social data (profiles, posts, stories, reels metadata, chats) in the single Motoko canister, ensuring data remains available after user logout/login and page refresh.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Friend-group social web app (Instagram-like) with posts, stories, reels, search, 1:1 chat, games, music library, and study tools",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

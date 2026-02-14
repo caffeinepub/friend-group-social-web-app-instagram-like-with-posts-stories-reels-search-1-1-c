@@ -1,0 +1,90 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-14T09:16:31.662Z",
+  "summary": "Diff adds a single Motoko backend actor with data models for profiles/posts/stories/reels/messages and adds substantial frontend structure: authenticated app routing/layout with a global header + navigation, AI Tools (writing tool, local image generator, local rules-based chatbot), Study Tools (whiteboard + slides), and multiple browser mini-games (Tic-Tac-Toe, Memory Match, Snake, 2048, Quiz). Some requirements cannot be verified due to many omitted/truncated added files. Clear gaps are avatar upload UI for profiles and the slides tool not showing support for multiple text blocks per slide.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Support optional avatar image in the in-app user profile, including a way for the user to set/upload it after first login.",
+      "reason": "Backend profile type includes an avatar field, but the shown profile setup UI always submits `avatar: undefined` and provides no avatar upload/select control, so users cannot set an avatar from the UI based on available evidence.",
+      "evidence": [
+        "frontend/src/components/profile/ProfileSetupModal.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Slide tool supports adding text blocks (not just a single text area per slide) and editing them.",
+      "reason": "The provided Slides tool structure indicates each slide contains a single `content: string` edited as one textarea; no evidence of multiple text blocks per slide is shown in the diff snippet.",
+      "evidence": [
+        "frontend/src/components/study/SlidesTool.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Role/permission-based authorization mixin (AccessControl + MixinAuthorization) used to gate profile access.",
+      "reason": "BuildRequest requires basic authorization, but does not request adding/using a specific mixin-based access control framework; this is additional functionality/implementation detail beyond the requested feature set.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "ThemeProvider via `next-themes` (system theme support).",
+      "reason": "BuildRequest asks for a coherent visual theme and explicitly forbids blue/purple, but does not request system theme toggling/provider behavior; this is extra behavior beyond requirements.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.62,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/ai/chatbotRules.ts",
+    "frontend/src/components/ai/AiWritingTool.tsx",
+    "frontend/src/components/ai/ImageGenerator.tsx",
+    "frontend/src/components/ai/LocalChatbot.tsx",
+    "frontend/src/components/layout/AppHeader.tsx",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/components/layout/AppNavigation.tsx",
+    "frontend/src/components/posts/PostCard.tsx",
+    "frontend/src/components/profile/ProfileSetupModal.tsx",
+    "frontend/src/components/study/SlidesTool.tsx",
+    "frontend/src/components/study/Whiteboard.tsx",
+    "frontend/src/games/2048/Game2048.tsx",
+    "frontend/src/games/memory-match/MemoryMatch.tsx",
+    "frontend/src/games/quiz/Quiz.tsx",
+    "frontend/src/games/snake/Snake.tsx",
+    "frontend/src/games/tic-tac-toe/TicTacToe.tsx",
+    "frontend/src/hooks/queries/useChat.ts",
+    "frontend/src/hooks/queries/useCurrentUserProfile.ts",
+    "frontend/src/hooks/queries/usePosts.ts",
+    "frontend/src/hooks/queries/useReels.ts",
+    "frontend/src/hooks/queries/useStories.ts",
+    "frontend/src/hooks/queries/useUserSearch.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/music/library.ts",
+    "frontend/src/pages/AiToolsPage.tsx",
+    "frontend/src/pages/ChatPage.tsx",
+    "frontend/src/pages/FeedPage.tsx",
+    "frontend/src/pages/GamesPage.tsx",
+    "frontend/src/pages/LoginScreen.tsx",
+    "frontend/src/pages/MusicPage.tsx",
+    "frontend/src/pages/ReelsPage.tsx",
+    "frontend/src/pages/SearchPage.tsx",
+    "frontend/src/pages/StoriesPage.tsx",
+    "frontend/src/pages/StudyToolsPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "kind": "build_request",
+  "title": "Friend-group social web app (Instagram-like) with posts, stories, reels, search, 1:1 chat, games, music library, and study tools",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Add authentication using Internet Identity and create an in-app user profile model stored in the Motoko canister (display name, username/handle, optional bio, optional avatar image). On first login, prompt the user to create/complete their profile; on subsequent logins, load their existing profile.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "like Instagram where we can create an account",
+          "In that we can also create an account",
+          "all information that we upload ... when will login account again it will appear"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can sign in/out with Internet Identity from the app UI.",
+        "After first sign-in, user is prompted to set a username/handle and display name; values persist across sessions.",
+        "Returning users see their saved profile without re-entering details.",
+        "Profile data is stored in the backend canister and returned via query/update methods."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement user discovery: provide an account search screen that can find profiles by username/handle and allow initiating a 1:1 chat with a selected user.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "we can chat each other by searching account"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Search supports partial matching on username/handle.",
+        "Search results show display name + username + avatar (if present).",
+        "Selecting a user opens (or creates) a conversation thread between the two users."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement 1:1 chat with persistent message history stored in the Motoko canister. The chat UI must support sending text messages and viewing conversation history, and it must work across logins (messages reappear after re-authentication).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "we can chat each other",
+          "chat will also",
+          "when will login account again it will appear also"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can send a text message to another user and it is stored in the backend.",
+        "Conversation history loads correctly after refresh and after logging out/in.",
+        "Chat list shows existing conversations and last message preview.",
+        "No WebSockets are used; message refresh uses polling/refresh via React Query."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement posts (Instagram-like feed): allow authenticated users to create posts containing caption text and an optional image upload; store posts and images in the Motoko canister and render a feed with newest-first ordering.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "we can also post",
+          "all information that we upload like photo ... with store in storage"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can create a post with caption and optional image.",
+        "Created posts appear in the main feed for all users.",
+        "Post images persist across refresh and across logins.",
+        "Backend provides methods to create/list posts; feed loads via React Query."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement Stories: allow authenticated users to create a story with optional image and short text; store and list stories in the Motoko canister, and provide a stories viewer UI. Stories must persist across logins.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "apply story",
+          "all information that we upload like ... story ... store in storage when will login account again it will appear"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can create a story with optional image and text.",
+        "Stories can be browsed in a viewer UI grouped by author.",
+        "Stories persist across refresh and across logins.",
+        "Backend provides methods to create/list stories."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement Reels (short-form media) as an MVP: allow authenticated users to create a reel entry with a title/caption and either (a) an uploaded small video OR (b) a link field if video storage is not feasible within canister limits; store reel metadata in the Motoko canister and show a reels list/viewer. Reels must persist across logins.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "real",
+          "Reels feature (create/view) with persistent storage"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can create a reel with caption/title.",
+        "Reels list renders and a reel can be opened in a viewer.",
+        "Reels persist across refresh and across logins.",
+        "If upload is supported, uploaded media plays back; if link-only fallback is used, the UI clearly supports entering and opening the link."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add a top application header present across all sections with: (1) a left-aligned logo image and (2) the exact text: \"owner Piyush Singh for Yash Jay Anush Harsh Abhay\". All user-facing UI text must be in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "create a header where it is written that \" owner Piyush Singh for Yash Jay Anush Harsh Abhay \"",
+          "Also leave a logo in header at left corner"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Header is visible on all main pages/sections.",
+        "Logo is on the left; the required text appears exactly as provided.",
+        "No non-English UI labels are introduced."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Add a Games section containing at least five distinct mini-games that run fully in the browser without external services (e.g., Tic-Tac-Toe, Memory Match, Snake, 2048, and a simple Quiz).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "we can also play a game and also play music attach at least five type of a game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Games section exists and is reachable from main navigation.",
+        "At least five different game types are playable.",
+        "Each game has a reset/restart control and basic instructions in English."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Add a Music section that provides a local, offline-ready music library UI using bundled audio files and metadata (title, artist, region tags like India/Pakistan). Include a clear way to browse and play tracks within the app.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "attached many Indian songs and also popular Pakistani song in that make a separate section"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Music section exists with a list/grid of tracks and a player (play/pause/seek/next/prev).",
+        "Tracks are loaded from static assets bundled with the frontend (no external streaming).",
+        "Tracks can be filtered by tags such as India and Pakistan."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add a Study Tools section with (A) a whiteboard tool (freehand drawing, colors, eraser, clear board, export to PNG) and (B) a simple PPT-like slide tool (create slides, add text blocks, reorder slides, present/preview).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "make a separate section where we can use as a white board or a PPT study tool"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Whiteboard supports draw/erase, color selection, clear, and export to PNG.",
+        "Slide tool supports creating multiple slides, adding/editing text, reordering slides, and a presentation/preview mode.",
+        "All controls have English labels."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Add an \"AI Tools\" section containing: (A) an AI Writing tool implemented as on-device, non-LLM helpers (templates, tone transforms, summarization-style heuristics) and (B) an Image Generator implemented as a local canvas-based generator (e.g., pattern/gradient/shape composition) that can export generated images to PNG. No third-party AI APIs may be used.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "it is separate section where we can generate image and also we can write anything by AI and also add a little chatbot"
+        ]
+      },
+      "acceptanceCriteria": [
+        "AI Writing tool can generate text output from user prompts using local templates/heuristics and allow copy/download.",
+        "Image Generator can generate an image locally and export to PNG.",
+        "No calls to external AI/LLM/image-generation services are present."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Add a small in-app chatbot implemented as a local rules-based assistant (FAQ-style + command shortcuts to navigate features) available from the AI Tools section.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "add a little chatbot"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Chatbot UI supports user messages and assistant replies.",
+        "Chatbot operates fully locally (no external AI service).",
+        "Chatbot can answer basic app-usage questions and provide shortcuts/links to sections."
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Persist uploaded media (avatars, post images, story images, and any reel media if supported) and all social data (profiles, posts, stories, reels metadata, chats) in the single Motoko canister, ensuring data remains available after user logout/login and page refresh.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "all information that we upload like photo real story with store in storage when will login account again it will appear also and chat will also"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores and returns consistent data across sessions for the same authenticated principal.",
+        "Media retrieval endpoints/methods return correct bytes for stored images (and video if implemented).",
+        "Data access enforces basic authorization so users can only modify their own profile/content and only send messages as themselves."
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Create a coherent, distinctive visual theme for the app (colors, typography, spacing, and component styling) and apply it consistently across all sections. Do not use a blue/purple theme.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App uses a consistent theme across pages (navigation, cards, buttons, inputs).",
+        "Theme does not primarily rely on blue/purple as the main palette.",
+        "UI remains readable and accessible with clear contrast and hierarchy."
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Add a static-assets integration for generated images and brand assets: place generated images in frontend/public/assets/generated and ensure the header logo loads from there.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Also leave a logo in header at left corner"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images are stored under frontend/public/assets/generated.",
+        "Header logo references a file under frontend/public/assets/generated and renders correctly."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
+    "Do not edit files under frontend immutablePaths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui); compose and use them as-is.",
+    "Do not use WebSockets/Socket.io; implement chat updates via polling/refresh.",
+    "Do not integrate third-party authentication providers; use Internet Identity only.",
+    "Do not integrate external AI/LLM/image-generation services; AI-like features must be local/offline heuristics.",
+    "Do not include or bundle copyrighted commercial songs; only include properly licensed or user-provided audio files."
+  ],
+  "nonGoals": [
+    "Providing a ready Android APK file (APK build/export is not supported by this platform).",
+    "Providing a hosted website link (deployment/hosting is not provided here).",
+    "A fully real-time chat experience (typing indicators, instant delivery) beyond polling-based updates.",
+    "Full Instagram parity (advanced editing, effects, monetization, recommendations, live streaming).",
+    "Including 'many Indian songs' and 'popular Pakistani songs' as copyrighted tracks; the app will instead support a music library UI and play bundled/licensed/demo audio."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Minimal flat logo mark (caffeine-social-logo.dim_256x256.png)",
+      "Wide header logo lockup with textless icon variant (caffeine-social-logo-wide.dim_800x200.png)",
+      "App favicon-style icon (caffeine-social-favicon.dim_64x64.png)"
+    ],
+    "edits": []
+  }
+}

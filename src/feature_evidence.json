@@ -1,0 +1,309 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-authentication-using-internet-identity-and-create-an-in-app-user-profile-model-stored-in-the-motoko-canister-display-name-username-handle-optional-bio-optional-avatar-image-on-first-login-prompt-the-user-to-create-complete-their-profile-on-subsequent-logins-load-their-existing-profile",
+      "featureTitle": "Add authentication using Internet Identity and create an in-app user profile model stored in the Motoko canister (display name, username/handle, optional bio, optional avatar image). On first login, prompt the user to create/complete their profile; on subsequent logins, load their existing profile.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/profile/ProfileSetupModal.tsx",
+        "frontend/src/hooks/queries/useCurrentUserProfile.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-user-discovery-provide-an-account-search-screen-that-can-find-profiles-by-username-handle-and-allow-initiating-a-1-1-chat-with-a-selected-user",
+      "featureTitle": "Implement user discovery: provide an account search screen that can find profiles by username/handle and allow initiating a 1:1 chat with a selected user.",
+      "files": [
+        "frontend/src/hooks/queries/useUserSearch.ts",
+        "frontend/src/pages/SearchPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-1-1-chat-with-persistent-message-history-stored-in-the-motoko-canister-the-chat-ui-must-support-sending-text-messages-and-viewing-conversation-history-and-it-must-work-across-logins-messages-reappear-after-re-authentication",
+      "featureTitle": "Implement 1:1 chat with persistent message history stored in the Motoko canister. The chat UI must support sending text messages and viewing conversation history, and it must work across logins (messages reappear after re-authentication).",
+      "files": [
+        "frontend/src/hooks/queries/useChat.ts",
+        "frontend/src/pages/ChatPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-posts-instagram-like-feed-allow-authenticated-users-to-create-posts-containing-caption-text-and-an-optional-image-upload-store-posts-and-images-in-the-motoko-canister-and-render-a-feed-with-newest-first-ordering",
+      "featureTitle": "Implement posts (Instagram-like feed): allow authenticated users to create posts containing caption text and an optional image upload; store posts and images in the Motoko canister and render a feed with newest-first ordering.",
+      "files": [
+        "frontend/src/components/posts/PostCard.tsx",
+        "frontend/src/hooks/queries/usePosts.ts",
+        "frontend/src/pages/FeedPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-stories-allow-authenticated-users-to-create-a-story-with-optional-image-and-short-text-store-and-list-stories-in-the-motoko-canister-and-provide-a-stories-viewer-ui-stories-must-persist-across-logins",
+      "featureTitle": "Implement Stories: allow authenticated users to create a story with optional image and short text; store and list stories in the Motoko canister, and provide a stories viewer UI. Stories must persist across logins.",
+      "files": [
+        "frontend/src/hooks/queries/useStories.ts",
+        "frontend/src/pages/StoriesPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-reels-short-form-media-as-an-mvp-allow-authenticated-users-to-create-a-reel-entry-with-a-title-caption-and-either-a-an-uploaded-small-video-or-b-a-link-field-if-video-storage-is-not-feasible-within-canister-limits-store-reel-metadata-in-the-motoko-canister-and-show-a-reels-list-viewer-reels-must-persist-across-logins",
+      "featureTitle": "Implement Reels (short-form media) as an MVP: allow authenticated users to create a reel entry with a title/caption and either (a) an uploaded small video OR (b) a link field if video storage is not feasible within canister limits; store reel metadata in the Motoko canister and show a reels list/viewer. Reels must persist across logins.",
+      "files": [
+        "frontend/src/hooks/queries/useReels.ts",
+        "frontend/src/pages/ReelsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-top-application-header-present-across-all-sections-with-1-a-left-aligned-logo-image-and-2-the-exact-text-owner-piyush-singh-for-yash-jay-anush-harsh-abhay-all-user-facing-ui-text-must-be-in-english",
+      "featureTitle": "Add a top application header present across all sections with: (1) a left-aligned logo image and (2) the exact text: \"owner Piyush Singh for Yash Jay Anush Harsh Abhay\". All user-facing UI text must be in English.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/AppHeader.tsx",
+        "frontend/src/components/layout/AppLayout.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-games-section-containing-at-least-five-distinct-mini-games-that-run-fully-in-the-browser-without-external-services-e-g-tic-tac-toe-memory-match-snake-2048-and-a-simple-quiz",
+      "featureTitle": "Add a Games section containing at least five distinct mini-games that run fully in the browser without external services (e.g., Tic-Tac-Toe, Memory Match, Snake, 2048, and a simple Quiz).",
+      "files": [
+        "frontend/src/games/2048/Game2048.tsx",
+        "frontend/src/games/memory-match/MemoryMatch.tsx",
+        "frontend/src/games/quiz/Quiz.tsx",
+        "frontend/src/games/snake/Snake.tsx",
+        "frontend/src/games/tic-tac-toe/TicTacToe.tsx",
+        "frontend/src/pages/GamesPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-music-section-that-provides-a-local-offline-ready-music-library-ui-using-bundled-audio-files-and-metadata-title-artist-region-tags-like-india-pakistan-include-a-clear-way-to-browse-and-play-tracks-within-the-app",
+      "featureTitle": "Add a Music section that provides a local, offline-ready music library UI using bundled audio files and metadata (title, artist, region tags like India/Pakistan). Include a clear way to browse and play tracks within the app.",
+      "files": [
+        "frontend/src/music/library.ts",
+        "frontend/src/pages/MusicPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-study-tools-section-with-a-a-whiteboard-tool-freehand-drawing-colors-eraser-clear-board-export-to-png-and-b-a-simple-ppt-like-slide-tool-create-slides-add-text-blocks-reorder-slides-present-preview",
+      "featureTitle": "Add a Study Tools section with (A) a whiteboard tool (freehand drawing, colors, eraser, clear board, export to PNG) and (B) a simple PPT-like slide tool (create slides, add text blocks, reorder slides, present/preview).",
+      "files": [
+        "frontend/src/components/study/SlidesTool.tsx",
+        "frontend/src/components/study/Whiteboard.tsx",
+        "frontend/src/pages/StudyToolsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-ai-tools-section-containing-a-an-ai-writing-tool-implemented-as-on-device-non-llm-helpers-templates-tone-transforms-summarization-style-heuristics-and-b-an-image-generator-implemented-as-a-local-canvas-based-generator-e-g-pattern-gradient-shape-composition-that-can-export-generated-images-to-png-no-third-party-ai-apis-may-be-used",
+      "featureTitle": "Add an \"AI Tools\" section containing: (A) an AI Writing tool implemented as on-device, non-LLM helpers (templates, tone transforms, summarization-style heuristics) and (B) an Image Generator implemented as a local canvas-based generator (e.g., pattern/gradient/shape composition) that can export generated images to PNG. No third-party AI APIs may be used.",
+      "files": [
+        "frontend/src/components/ai/AiWritingTool.tsx",
+        "frontend/src/components/ai/ImageGenerator.tsx",
+        "frontend/src/pages/AiToolsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-small-in-app-chatbot-implemented-as-a-local-rules-based-assistant-faq-style-command-shortcuts-to-navigate-features-available-from-the-ai-tools-section",
+      "featureTitle": "Add a small in-app chatbot implemented as a local rules-based assistant (FAQ-style + command shortcuts to navigate features) available from the AI Tools section.",
+      "files": [
+        "frontend/src/ai/chatbotRules.ts",
+        "frontend/src/components/ai/LocalChatbot.tsx",
+        "frontend/src/pages/AiToolsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-a-coherent-distinctive-visual-theme-for-the-app-colors-typography-spacing-and-component-styling-and-apply-it-consistently-across-all-sections-do-not-use-a-blue-purple-theme",
+      "featureTitle": "Create a coherent, distinctive visual theme for the app (colors, typography, spacing, and component styling) and apply it consistently across all sections. Do not use a blue/purple theme.",
+      "files": [
+        "frontend/src/components/layout/AppLayout.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-static-assets-integration-for-generated-images-and-brand-assets-place-generated-images-in-frontend-public-assets-generated-and-ensure-the-header-logo-loads-from-there",
+      "featureTitle": "Add a static-assets integration for generated images and brand assets: place generated images in frontend/public/assets/generated and ensure the header logo loads from there.",
+      "files": [
+        "frontend/src/components/layout/AppHeader.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
