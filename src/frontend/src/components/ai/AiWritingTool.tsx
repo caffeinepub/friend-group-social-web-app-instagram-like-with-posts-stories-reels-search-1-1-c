@@ -1,41 +1,47 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Copy, Download } from 'lucide-react';
-import { toast } from 'sonner';
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Copy, Download } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
-const tones = ['professional', 'casual', 'friendly', 'formal'];
+const tones = ["professional", "casual", "friendly", "formal"];
 
 export default function AiWritingTool() {
-  const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
-  const [tone, setTone] = useState('professional');
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [tone, setTone] = useState("professional");
 
   const transform = () => {
     if (!input.trim()) {
-      toast.error('Please enter some text');
+      toast.error("Please enter some text");
       return;
     }
 
     let result = input;
-    
+
     switch (tone) {
-      case 'professional':
+      case "professional":
         result = input
-          .replace(/\bi\b/gi, 'I')
-          .replace(/\bu\b/gi, 'you')
-          .replace(/\bur\b/gi, 'your');
+          .replace(/\bi\b/gi, "I")
+          .replace(/\bu\b/gi, "you")
+          .replace(/\bur\b/gi, "your");
         break;
-      case 'casual':
+      case "casual":
         result = input.toLowerCase();
         break;
-      case 'friendly':
-        result = input + ' 😊';
+      case "friendly":
+        result = `${input} 😊`;
         break;
-      case 'formal':
-        result = input.charAt(0).toUpperCase() + input.slice(1) + '.';
+      case "formal":
+        result = `${input.charAt(0).toUpperCase() + input.slice(1)}.`;
         break;
     }
 
@@ -44,14 +50,14 @@ export default function AiWritingTool() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(output);
-    toast.success('Copied to clipboard!');
+    toast.success("Copied to clipboard!");
   };
 
   const downloadText = () => {
-    const blob = new Blob([output], { type: 'text/plain' });
+    const blob = new Blob([output], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.download = 'ai-writing.txt';
+    const link = document.createElement("a");
+    link.download = "ai-writing.txt";
     link.href = url;
     link.click();
     URL.revokeObjectURL(url);

@@ -1,8 +1,14 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
-import { Plus, Trash2, ChevronLeft, ChevronRight, Presentation } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Presentation,
+  Trash2,
+} from "lucide-react";
+import { useState } from "react";
 
 interface Slide {
   id: string;
@@ -10,14 +16,16 @@ interface Slide {
 }
 
 export default function SlidesTool() {
-  const [slides, setSlides] = useState<Slide[]>([{ id: '1', content: 'Slide 1' }]);
+  const [slides, setSlides] = useState<Slide[]>([
+    { id: "1", content: "Slide 1" },
+  ]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPresentMode, setIsPresentMode] = useState(false);
 
   const addSlide = () => {
     const newSlide: Slide = {
       id: Date.now().toString(),
-      content: `Slide ${slides.length + 1}`
+      content: `Slide ${slides.length + 1}`,
     };
     setSlides([...slides, newSlide]);
     setCurrentIndex(slides.length);
@@ -53,7 +61,9 @@ export default function SlidesTool() {
         <div className="flex-1 flex items-center justify-center p-8">
           <Card className="w-full max-w-4xl">
             <CardContent className="p-12">
-              <p className="text-3xl whitespace-pre-wrap">{slides[currentIndex].content}</p>
+              <p className="text-3xl whitespace-pre-wrap">
+                {slides[currentIndex].content}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -71,7 +81,9 @@ export default function SlidesTool() {
           </span>
           <Button
             variant="outline"
-            onClick={() => setCurrentIndex(Math.min(slides.length - 1, currentIndex + 1))}
+            onClick={() =>
+              setCurrentIndex(Math.min(slides.length - 1, currentIndex + 1))
+            }
             disabled={currentIndex === slides.length - 1}
           >
             Next
@@ -79,7 +91,9 @@ export default function SlidesTool() {
           </Button>
         </div>
         <div className="p-4 border-t text-center">
-          <Button onClick={() => setIsPresentMode(false)}>Exit Presentation</Button>
+          <Button onClick={() => setIsPresentMode(false)}>
+            Exit Presentation
+          </Button>
         </div>
       </div>
     );
@@ -92,7 +106,11 @@ export default function SlidesTool() {
           <Plus className="w-4 h-4 mr-2" />
           Add Slide
         </Button>
-        <Button onClick={() => setIsPresentMode(true)} size="sm" variant="outline">
+        <Button
+          onClick={() => setIsPresentMode(true)}
+          size="sm"
+          variant="outline"
+        >
           <Presentation className="w-4 h-4 mr-2" />
           Present
         </Button>
@@ -106,7 +124,7 @@ export default function SlidesTool() {
               <Card
                 key={slide.id}
                 className={`cursor-pointer transition-colors ${
-                  i === currentIndex ? 'border-primary' : ''
+                  i === currentIndex ? "border-primary" : ""
                 }`}
                 onClick={() => setCurrentIndex(i)}
               >

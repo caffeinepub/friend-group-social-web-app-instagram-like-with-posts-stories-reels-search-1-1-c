@@ -1,52 +1,54 @@
-import { useState } from 'react';
-import { useGetPosts, useCreatePost } from '../hooks/queries/usePosts';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Loader2, Image as ImageIcon } from 'lucide-react';
-import { toast } from 'sonner';
-import { ExternalBlob } from '../backend';
-import PostCard from '../components/posts/PostCard';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Image as ImageIcon, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { ExternalBlob } from "../backend";
+import PostCard from "../components/posts/PostCard";
+import { useCreatePost, useGetPosts } from "../hooks/queries/usePosts";
 
 export default function FeedPage() {
   const { data: posts, isLoading } = useGetPosts();
   const createPost = useCreatePost();
-  const [caption, setCaption] = useState('');
+  const [caption, setCaption] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!caption.trim()) {
-      toast.error('Please enter a caption');
+      toast.error("Please enter a caption");
       return;
     }
 
     try {
       let imageBlob: ExternalBlob | null = null;
-      
+
       if (imageFile) {
         const arrayBuffer = await imageFile.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
-        imageBlob = ExternalBlob.fromBytes(uint8Array).withUploadProgress((percentage) => {
-          setUploadProgress(percentage);
-        });
+        imageBlob = ExternalBlob.fromBytes(uint8Array).withUploadProgress(
+          (percentage) => {
+            setUploadProgress(percentage);
+          },
+        );
       }
 
       await createPost.mutateAsync({
         caption: caption.trim(),
-        image: imageBlob
+        image: imageBlob,
       });
 
-      setCaption('');
+      setCaption("");
       setImageFile(null);
       setUploadProgress(0);
-      toast.success('Post created successfully!');
+      toast.success("Post created successfully!");
     } catch (error) {
-      toast.error('Failed to create post');
+      toast.error("Failed to create post");
       console.error(error);
     }
   };
@@ -86,15 +88,15 @@ export default function FeedPage() {
                   <span>{uploadProgress}%</span>
                 </div>
                 <div className="w-full bg-secondary rounded-full h-2">
-                  <div 
+                  <div
                     className="bg-primary h-2 rounded-full transition-all"
                     style={{ width: `${uploadProgress}%` }}
                   />
                 </div>
               </div>
             )}
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full min-h-[44px]"
               disabled={createPost.isPending}
             >

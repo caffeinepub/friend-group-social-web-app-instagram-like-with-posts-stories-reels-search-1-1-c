@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { useSearchUsers } from '../hooks/queries/useUserSearch';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Search, MessageCircle, Loader2 } from 'lucide-react';
-import { useNavigate } from '@tanstack/react-router';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "@tanstack/react-router";
+import { Loader2, MessageCircle, Search } from "lucide-react";
+import { useState } from "react";
+import { useSearchUsers } from "../hooks/queries/useUserSearch";
 
 export default function SearchPage() {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const { data: usernames, isLoading } = useSearchUsers(searchText);
   const navigate = useNavigate();
 
   const handleStartChat = (username: string) => {
-    navigate({ to: '/chat', search: { user: username } });
+    navigate({ to: "/chat", search: { user: username } });
   };
 
   return (
@@ -44,10 +44,12 @@ export default function SearchPage() {
             <Card key={username}>
               <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-4 px-4 md:px-6">
                 <div className="min-w-0">
-                  <p className="font-semibold text-sm md:text-base truncate">@{username}</p>
+                  <p className="font-semibold text-sm md:text-base truncate">
+                    @{username}
+                  </p>
                 </div>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   onClick={() => handleStartChat(username)}
                   className="gap-2 w-full sm:w-auto min-h-[44px] sm:min-h-0"
                 >

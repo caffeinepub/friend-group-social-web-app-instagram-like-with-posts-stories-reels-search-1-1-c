@@ -1,32 +1,32 @@
-import { useNavigate } from '@tanstack/react-router';
-import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Pencil, Image, MessageSquare, PenTool } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useNavigate } from "@tanstack/react-router";
+import { Image, MessageSquare, PenTool, Pencil } from "lucide-react";
 
 export default function FunctionalButtonBar() {
   const navigate = useNavigate();
 
   const buttons = [
     {
-      label: 'Whiteboard',
+      label: "Whiteboard",
       icon: PenTool,
-      onClick: () => navigate({ to: '/study' })
+      onClick: () => navigate({ to: "/study" }),
     },
     {
-      label: 'AI Image Generation',
+      label: "AI Image Generation",
       icon: Image,
-      onClick: () => navigate({ to: '/ai', search: { tab: 'image' } })
+      onClick: () => navigate({ to: "/ai", search: { tab: "image" } }),
     },
     {
-      label: 'AI Writing',
+      label: "AI Writing",
       icon: Pencil,
-      onClick: () => navigate({ to: '/ai', search: { tab: 'writing' } })
+      onClick: () => navigate({ to: "/ai", search: { tab: "writing" } }),
     },
     {
-      label: 'Chatbot',
+      label: "Chatbot",
       icon: MessageSquare,
-      onClick: () => navigate({ to: '/ai', search: { tab: 'chatbot' } })
-    }
+      onClick: () => navigate({ to: "/ai", search: { tab: "chatbot" } }),
+    },
   ];
 
   return (

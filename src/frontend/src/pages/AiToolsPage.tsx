@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
-import { useSearch } from '@tanstack/react-router';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import AiWritingTool from '../components/ai/AiWritingTool';
-import ImageGenerator from '../components/ai/ImageGenerator';
-import LocalChatbot from '../components/ai/LocalChatbot';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSearch } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import AiWritingTool from "../components/ai/AiWritingTool";
+import ImageGenerator from "../components/ai/ImageGenerator";
+import LocalChatbot from "../components/ai/LocalChatbot";
 
 export default function AiToolsPage() {
   const search = useSearch({ strict: false }) as { tab?: string };
-  const [activeTab, setActiveTab] = useState('writing');
+  const [activeTab, setActiveTab] = useState("writing");
 
   useEffect(() => {
-    if (search.tab && ['writing', 'image', 'chatbot'].includes(search.tab)) {
+    if (search.tab && ["writing", "image", "chatbot"].includes(search.tab)) {
       setActiveTab(search.tab);
     }
   }, [search.tab]);
@@ -27,9 +27,15 @@ export default function AiToolsPage() {
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <ScrollArea className="w-full whitespace-nowrap">
               <TabsList className="inline-flex w-auto md:grid md:w-full md:grid-cols-3">
-                <TabsTrigger value="writing" className="px-4 md:px-6">AI Writing</TabsTrigger>
-                <TabsTrigger value="image" className="px-4 md:px-6">Image Generator</TabsTrigger>
-                <TabsTrigger value="chatbot" className="px-4 md:px-6">Chatbot</TabsTrigger>
+                <TabsTrigger value="writing" className="px-4 md:px-6">
+                  AI Writing
+                </TabsTrigger>
+                <TabsTrigger value="image" className="px-4 md:px-6">
+                  Image Generator
+                </TabsTrigger>
+                <TabsTrigger value="chatbot" className="px-4 md:px-6">
+                  Chatbot
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="md:hidden" />
             </ScrollArea>

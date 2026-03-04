@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { useCallback, useEffect, useState } from "react";
 
 type Position = { x: number; y: number };
-type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
+type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 
 const GRID_SIZE = 20;
 const CELL_SIZE = 20;
@@ -10,7 +10,7 @@ const CELL_SIZE = 20;
 export default function Snake() {
   const [snake, setSnake] = useState<Position[]>([{ x: 10, y: 10 }]);
   const [food, setFood] = useState<Position>({ x: 15, y: 15 });
-  const [direction, setDirection] = useState<Direction>('RIGHT');
+  const [direction, setDirection] = useState<Direction>("RIGHT");
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -18,14 +18,14 @@ export default function Snake() {
   const generateFood = useCallback(() => {
     return {
       x: Math.floor(Math.random() * GRID_SIZE),
-      y: Math.floor(Math.random() * GRID_SIZE)
+      y: Math.floor(Math.random() * GRID_SIZE),
     };
   }, []);
 
   const resetGame = () => {
     setSnake([{ x: 10, y: 10 }]);
     setFood(generateFood());
-    setDirection('RIGHT');
+    setDirection("RIGHT");
     setGameOver(false);
     setScore(0);
     setIsPlaying(true);
@@ -36,23 +36,23 @@ export default function Snake() {
 
     const handleKeyPress = (e: KeyboardEvent) => {
       switch (e.key) {
-        case 'ArrowUp':
-          if (direction !== 'DOWN') setDirection('UP');
+        case "ArrowUp":
+          if (direction !== "DOWN") setDirection("UP");
           break;
-        case 'ArrowDown':
-          if (direction !== 'UP') setDirection('DOWN');
+        case "ArrowDown":
+          if (direction !== "UP") setDirection("DOWN");
           break;
-        case 'ArrowLeft':
-          if (direction !== 'RIGHT') setDirection('LEFT');
+        case "ArrowLeft":
+          if (direction !== "RIGHT") setDirection("LEFT");
           break;
-        case 'ArrowRight':
-          if (direction !== 'LEFT') setDirection('RIGHT');
+        case "ArrowRight":
+          if (direction !== "LEFT") setDirection("RIGHT");
           break;
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, [direction, isPlaying, gameOver]);
 
   useEffect(() => {
@@ -64,24 +64,28 @@ export default function Snake() {
         let newHead: Position;
 
         switch (direction) {
-          case 'UP':
+          case "UP":
             newHead = { x: head.x, y: head.y - 1 };
             break;
-          case 'DOWN':
+          case "DOWN":
             newHead = { x: head.x, y: head.y + 1 };
             break;
-          case 'LEFT':
+          case "LEFT":
             newHead = { x: head.x - 1, y: head.y };
             break;
-          case 'RIGHT':
+          case "RIGHT":
             newHead = { x: head.x + 1, y: head.y };
             break;
         }
 
         if (
-          newHead.x < 0 || newHead.x >= GRID_SIZE ||
-          newHead.y < 0 || newHead.y >= GRID_SIZE ||
-          prevSnake.some(segment => segment.x === newHead.x && segment.y === newHead.y)
+          newHead.x < 0 ||
+          newHead.x >= GRID_SIZE ||
+          newHead.y < 0 ||
+          newHead.y >= GRID_SIZE ||
+          prevSnake.some(
+            (segment) => segment.x === newHead.x && segment.y === newHead.y,
+          )
         ) {
           setGameOver(true);
           setIsPlaying(false);
@@ -92,7 +96,7 @@ export default function Snake() {
 
         if (newHead.x === food.x && newHead.y === food.y) {
           setFood(generateFood());
-          setScore(s => s + 10);
+          setScore((s) => s + 10);
         } else {
           newSnake.pop();
         }
@@ -108,39 +112,44 @@ export default function Snake() {
     <div className="space-y-4 py-4">
       <div className="text-center">
         <p className="text-lg font-semibold">Score: {score}</p>
-        <p className="text-sm text-muted-foreground">Use arrow keys to control the snake</p>
+        <p className="text-sm text-muted-foreground">
+          Use arrow keys to control the snake
+        </p>
       </div>
-      <div 
+      <div
         className="mx-auto border-2 border-border bg-card"
-        style={{ 
-          width: GRID_SIZE * CELL_SIZE, 
+        style={{
+          width: GRID_SIZE * CELL_SIZE,
           height: GRID_SIZE * CELL_SIZE,
-          position: 'relative'
+          position: "relative",
         }}
       >
         {snake.map((segment, i) => (
           <div
-            key={i}
+            key={`${segment.x}-${segment.y}`}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: segment.x * CELL_SIZE,
               top: segment.y * CELL_SIZE,
               width: CELL_SIZE,
               height: CELL_SIZE,
-              backgroundColor: i === 0 ? 'oklch(var(--primary))' : 'oklch(var(--primary) / 0.7)',
-              borderRadius: '2px'
+              backgroundColor:
+                i === 0
+                  ? "oklch(var(--primary))"
+                  : "oklch(var(--primary) / 0.7)",
+              borderRadius: "2px",
             }}
           />
         ))}
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: food.x * CELL_SIZE,
             top: food.y * CELL_SIZE,
             width: CELL_SIZE,
             height: CELL_SIZE,
-            backgroundColor: 'oklch(var(--destructive))',
-            borderRadius: '50%'
+            backgroundColor: "oklch(var(--destructive))",
+            borderRadius: "50%",
           }}
         />
       </div>

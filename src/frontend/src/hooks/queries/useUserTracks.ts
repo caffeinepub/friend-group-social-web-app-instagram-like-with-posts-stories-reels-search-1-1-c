@@ -1,19 +1,19 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useActor } from '../useActor';
-import { useInternetIdentity } from '../useInternetIdentity';
-import type { Data, ExternalBlob } from '../../backend';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { Data, ExternalBlob } from "../../backend";
+import { useActor } from "../useActor";
+import { useInternetIdentity } from "../useInternetIdentity";
 
 export function useGetUserTracks() {
   const { actor, isFetching } = useActor();
   const { identity } = useInternetIdentity();
 
   return useQuery<Data[]>({
-    queryKey: ['userTracks', identity?.getPrincipal().toString()],
+    queryKey: ["userTracks", identity?.getPrincipal().toString()],
     queryFn: async () => {
       if (!actor || !identity) return [];
       return actor.getUserTracks(identity.getPrincipal());
     },
-    enabled: !!actor && !isFetching && !!identity
+    enabled: !!actor && !isFetching && !!identity,
   });
 }
 
@@ -23,12 +23,17 @@ export function useUploadTrack() {
   const { identity } = useInternetIdentity();
 
   return useMutation({
-    mutationFn: async ({ title, audio }: { title: string; audio: ExternalBlob }) => {
-      if (!actor) throw new Error('Actor not available');
+    mutationFn: async ({
+      title,
+      audio,
+    }: { title: string; audio: ExternalBlob }) => {
+      if (!actor) throw new Error("Actor not available");
       return actor.uploadTrack(title, audio);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['userTracks', identity?.getPrincipal().toString()] });
-    }
+      queryClient.invalidateQueries({
+        queryKey: ["userTracks", identity?.getPrincipal().toString()],
+      });
+    },
   });
 }

@@ -76,8 +76,9 @@ export default {
                 xs: '0 1px 2px 0 rgba(0,0,0,0.05)'
             },
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
-                display: ['Poppins', 'Inter', 'system-ui', 'sans-serif']
+                sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+                mono: ['JetBrains Mono', 'monospace']
             },
             keyframes: {
                 'accordion-down': {

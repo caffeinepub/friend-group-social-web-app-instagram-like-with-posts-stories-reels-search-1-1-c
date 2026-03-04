@@ -1,9 +1,9 @@
-import { useGetCallerUserProfile } from '../../hooks/queries/useCurrentUserProfile';
-import { useActor } from '../../hooks/useActor';
-import ProfileSetupModal from '../profile/ProfileSetupModal';
-import StartupErrorScreen from './StartupErrorScreen';
-import { useStartupRetry } from './useStartupRetry';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { useGetCallerUserProfile } from "../../hooks/queries/useCurrentUserProfile";
+import { useActor } from "../../hooks/useActor";
+import ProfileSetupModal from "../profile/ProfileSetupModal";
+import StartupErrorScreen from "./StartupErrorScreen";
+import { useStartupRetry } from "./useStartupRetry";
 
 interface AppInitGateProps {
   children: React.ReactNode;
@@ -11,7 +11,12 @@ interface AppInitGateProps {
 
 export default function AppInitGate({ children }: AppInitGateProps) {
   const { actor, isFetching: actorFetching } = useActor();
-  const { data: userProfile, isLoading: profileLoading, isFetched, error: profileError } = useGetCallerUserProfile();
+  const {
+    data: userProfile,
+    isLoading: profileLoading,
+    isFetched,
+    error: profileError,
+  } = useGetCallerUserProfile();
   const { retry } = useStartupRetry();
   const [initTimeout, setInitTimeout] = useState(false);
 
@@ -28,11 +33,16 @@ export default function AppInitGate({ children }: AppInitGateProps) {
 
   // Check for initialization errors or timeout
   const hasError = profileError || initTimeout;
-  
+
   if (hasError) {
     return (
-      <StartupErrorScreen 
-        error={profileError || new Error('Initialization timeout - please check your connection and try again')}
+      <StartupErrorScreen
+        error={
+          profileError ||
+          new Error(
+            "Initialization timeout - please check your connection and try again",
+          )
+        }
         onRetry={() => {
           setInitTimeout(false);
           retry();
@@ -42,8 +52,9 @@ export default function AppInitGate({ children }: AppInitGateProps) {
   }
 
   // Show loading state while actor or profile is initializing
-  const isInitializing = actorFetching || (!actor && !initTimeout) || profileLoading;
-  
+  const isInitializing =
+    actorFetching || (!actor && !initTimeout) || profileLoading;
+
   if (isInitializing) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
@@ -57,7 +68,7 @@ export default function AppInitGate({ children }: AppInitGateProps) {
 
   // Show profile setup if user is authenticated but has no profile
   const showProfileSetup = isFetched && userProfile === null;
-  
+
   if (showProfileSetup) {
     return <ProfileSetupModal />;
   }

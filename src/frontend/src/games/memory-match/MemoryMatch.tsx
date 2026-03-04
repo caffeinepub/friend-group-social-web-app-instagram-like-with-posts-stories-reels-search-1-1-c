@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
-const emojis = ['🎮', '🎨', '🎭', '🎪', '🎯', '🎲', '🎸', '🎹'];
+const emojis = ["🎮", "🎨", "🎭", "🎪", "🎯", "🎲", "🎸", "🎹"];
 
 export default function MemoryMatch() {
   const [cards, setCards] = useState<string[]>([]);
@@ -17,12 +17,12 @@ export default function MemoryMatch() {
     if (flipped.length === 2) {
       const [first, second] = flipped;
       if (cards[first] === cards[second]) {
-        setMatched([...matched, first, second]);
+        setMatched((prev) => [...prev, first, second]);
       }
       setTimeout(() => setFlipped([]), 1000);
-      setMoves(moves + 1);
+      setMoves((prev) => prev + 1);
     }
-  }, [flipped]);
+  }, [flipped, cards]);
 
   const resetGame = () => {
     const shuffled = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
@@ -33,7 +33,12 @@ export default function MemoryMatch() {
   };
 
   const handleClick = (index: number) => {
-    if (flipped.length === 2 || flipped.includes(index) || matched.includes(index)) return;
+    if (
+      flipped.length === 2 ||
+      flipped.includes(index) ||
+      matched.includes(index)
+    )
+      return;
     setFlipped([...flipped, index]);
   };
 
@@ -46,11 +51,13 @@ export default function MemoryMatch() {
       <div className="grid grid-cols-4 gap-2 max-w-md mx-auto">
         {cards.map((card, i) => (
           <button
-            key={i}
+            // biome-ignore lint/suspicious/noArrayIndexKey: card positions are stable within a game round
+            key={`${card}-${i}`}
+            type="button"
             onClick={() => handleClick(i)}
             className="aspect-square bg-card border-2 border-border hover:bg-accent text-4xl rounded-lg transition-all"
           >
-            {flipped.includes(i) || matched.includes(i) ? card : '?'}
+            {flipped.includes(i) || matched.includes(i) ? card : "?"}
           </button>
         ))}
       </div>

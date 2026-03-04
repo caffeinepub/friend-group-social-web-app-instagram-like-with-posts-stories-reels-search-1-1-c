@@ -1,8 +1,8 @@
-import { Outlet } from '@tanstack/react-router';
-import AppHeader from './AppHeader';
-import AppNavigation from './AppNavigation';
-import BottomTabBar from './BottomTabBar';
-import FunctionalButtonBar from './FunctionalButtonBar';
+import { Outlet } from "@tanstack/react-router";
+import AppHeader from "./AppHeader";
+import AppNavigation from "./AppNavigation";
+import BottomTabBar from "./BottomTabBar";
+import FunctionalButtonBar from "./FunctionalButtonBar";
 
 export default function AppLayout() {
   return (

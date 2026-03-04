@@ -1,11 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import TicTacToe from '../games/tic-tac-toe/TicTacToe';
-import MemoryMatch from '../games/memory-match/MemoryMatch';
-import Snake from '../games/snake/Snake';
-import Game2048 from '../games/2048/Game2048';
-import Quiz from '../games/quiz/Quiz';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Game2048 from "../games/2048/Game2048";
+import MemoryMatch from "../games/memory-match/MemoryMatch";
+import Quiz from "../games/quiz/Quiz";
+import Snake from "../games/snake/Snake";
+import TicTacToe from "../games/tic-tac-toe/TicTacToe";
 
 export default function GamesPage() {
   return (
@@ -18,11 +18,21 @@ export default function GamesPage() {
           <Tabs defaultValue="tictactoe">
             <ScrollArea className="w-full whitespace-nowrap">
               <TabsList className="inline-flex w-auto md:grid md:w-full md:grid-cols-5">
-                <TabsTrigger value="tictactoe" className="px-3 md:px-4">Tic-Tac-Toe</TabsTrigger>
-                <TabsTrigger value="memory" className="px-3 md:px-4">Memory</TabsTrigger>
-                <TabsTrigger value="snake" className="px-3 md:px-4">Snake</TabsTrigger>
-                <TabsTrigger value="2048" className="px-3 md:px-4">2048</TabsTrigger>
-                <TabsTrigger value="quiz" className="px-3 md:px-4">Quiz</TabsTrigger>
+                <TabsTrigger value="tictactoe" className="px-3 md:px-4">
+                  Tic-Tac-Toe
+                </TabsTrigger>
+                <TabsTrigger value="memory" className="px-3 md:px-4">
+                  Memory
+                </TabsTrigger>
+                <TabsTrigger value="snake" className="px-3 md:px-4">
+                  Snake
+                </TabsTrigger>
+                <TabsTrigger value="2048" className="px-3 md:px-4">
+                  2048
+                </TabsTrigger>
+                <TabsTrigger value="quiz" className="px-3 md:px-4">
+                  Quiz
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="md:hidden" />
             </ScrollArea>

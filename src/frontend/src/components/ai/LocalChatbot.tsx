@@ -1,56 +1,82 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Send } from 'lucide-react';
-import { useNavigate } from '@tanstack/react-router';
-import { chatbotRespond } from '../../ai/chatbotRules';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "@tanstack/react-router";
+import { Send } from "lucide-react";
+import { useState } from "react";
+import { chatbotRespond } from "../../ai/chatbotRules";
 
 interface Message {
-  role: 'user' | 'assistant';
+  id: string;
+  role: "user" | "assistant";
   content: string;
 }
 
 export default function LocalChatbot() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hello! I can help you navigate the app. Try asking "go to games" or "help".' }
+    {
+      id: "initial",
+      role: "assistant",
+      content:
+        'Hello! I can help you navigate the app. Try asking "go to games" or "help".',
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const navigate = useNavigate();
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage: Message = { role: 'user', content: input };
+    const userMessage: Message = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: input,
+    };
     setMessages([...messages, userMessage]);
 
-    const navigateWrapper = (opts: { to: '/' | '/feed' | '/chat' | '/search' | '/stories' | '/reels' | '/games' | '/music' | '/study' | '/ai' }) => {
+    const navigateWrapper = (opts: {
+      to:
+        | "/"
+        | "/feed"
+        | "/chat"
+        | "/search"
+        | "/stories"
+        | "/reels"
+        | "/games"
+        | "/music"
+        | "/study"
+        | "/ai";
+    }) => {
       navigate(opts);
     };
 
     const response = chatbotRespond(input, navigateWrapper);
-    const assistantMessage: Message = { role: 'assistant', content: response };
-    
+    const assistantMessage: Message = {
+      id: `assistant-${Date.now()}`,
+      role: "assistant",
+      content: response,
+    };
+
     setTimeout(() => {
-      setMessages(prev => [...prev, assistantMessage]);
+      setMessages((prev) => [...prev, assistantMessage]);
     }, 300);
 
-    setInput('');
+    setInput("");
   };
 
   return (
     <div className="space-y-4 py-4">
       <div className="border rounded-lg p-4 h-96 overflow-y-auto space-y-3 bg-muted/20">
-        {messages.map((msg, i) => (
+        {messages.map((msg) => (
           <div
-            key={i}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            key={msg.id}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`max-w-xs px-4 py-2 rounded-lg ${
-                msg.role === 'user'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-card border'
+                msg.role === "user"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-card border"
               }`}
             >
               <p className="text-sm">{msg.content}</p>

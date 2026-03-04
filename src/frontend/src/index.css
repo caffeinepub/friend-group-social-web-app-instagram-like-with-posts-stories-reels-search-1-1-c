@@ -2,137 +2,161 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/PlusJakartaSans-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
-    :root {
-        --radius: 0.625rem;
-        --background: 0.98 0 0;
-        --foreground: 0.15 0 0;
-        --card: 1 0 0;
-        --card-foreground: 0.15 0 0;
-        --popover: 1 0 0;
-        --popover-foreground: 0.15 0 0;
-        --primary: 0.55 0.18 145;
-        --primary-foreground: 0.98 0 0;
-        --secondary: 0.92 0.05 85;
-        --secondary-foreground: 0.15 0 0;
-        --muted: 0.94 0.02 85;
-        --muted-foreground: 0.50 0.02 85;
-        --accent: 0.88 0.08 145;
-        --accent-foreground: 0.15 0 0;
-        --destructive: 0.58 0.22 25;
-        --destructive-foreground: 0.98 0 0;
-        --border: 0.88 0.02 85;
-        --input: 0.88 0.02 85;
-        --ring: 0.55 0.18 145;
-        --chart-1: 0.65 0.20 145;
-        --chart-2: 0.60 0.15 85;
-        --chart-3: 0.70 0.18 200;
-        --chart-4: 0.55 0.16 25;
-        --chart-5: 0.75 0.20 300;
-        --sidebar: 0.98 0 0;
-        --sidebar-foreground: 0.15 0 0;
-        --sidebar-primary: 0.55 0.18 145;
-        --sidebar-primary-foreground: 0.98 0 0;
-        --sidebar-accent: 0.92 0.05 85;
-        --sidebar-accent-foreground: 0.15 0 0;
-        --sidebar-border: 0.88 0.02 85;
-        --sidebar-ring: 0.55 0.18 145;
-    }
+  :root {
+    --radius: 0.625rem;
+    --background: 0.98 0 0;
+    --foreground: 0.15 0 0;
+    --card: 1 0 0;
+    --card-foreground: 0.15 0 0;
+    --popover: 1 0 0;
+    --popover-foreground: 0.15 0 0;
+    --primary: 0.55 0.18 145;
+    --primary-foreground: 0.98 0 0;
+    --secondary: 0.92 0.05 85;
+    --secondary-foreground: 0.15 0 0;
+    --muted: 0.94 0.02 85;
+    --muted-foreground: 0.5 0.02 85;
+    --accent: 0.88 0.08 145;
+    --accent-foreground: 0.15 0 0;
+    --destructive: 0.58 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.88 0.02 85;
+    --input: 0.88 0.02 85;
+    --ring: 0.55 0.18 145;
+    --chart-1: 0.65 0.2 145;
+    --chart-2: 0.6 0.15 85;
+    --chart-3: 0.7 0.18 200;
+    --chart-4: 0.55 0.16 25;
+    --chart-5: 0.75 0.2 300;
+    --sidebar: 0.98 0 0;
+    --sidebar-foreground: 0.15 0 0;
+    --sidebar-primary: 0.55 0.18 145;
+    --sidebar-primary-foreground: 0.98 0 0;
+    --sidebar-accent: 0.92 0.05 85;
+    --sidebar-accent-foreground: 0.15 0 0;
+    --sidebar-border: 0.88 0.02 85;
+    --sidebar-ring: 0.55 0.18 145;
+  }
 
-    .dark {
-        --background: 0.12 0.02 145;
-        --foreground: 0.95 0.02 145;
-        --card: 0.18 0.03 145;
-        --card-foreground: 0.95 0.02 145;
-        --popover: 0.15 0.03 145;
-        --popover-foreground: 0.95 0.02 145;
-        --primary: 0.70 0.20 145;
-        --primary-foreground: 0.12 0.02 145;
-        --secondary: 0.25 0.05 145;
-        --secondary-foreground: 0.95 0.02 145;
-        --muted: 0.22 0.04 145;
-        --muted-foreground: 0.65 0.04 145;
-        --accent: 0.30 0.08 145;
-        --accent-foreground: 0.95 0.02 145;
-        --destructive: 0.60 0.24 25;
-        --destructive-foreground: 0.95 0.02 145;
-        --border: 0.25 0.04 145;
-        --input: 0.25 0.04 145;
-        --ring: 0.70 0.20 145;
-        --chart-1: 0.65 0.20 145;
-        --chart-2: 0.60 0.15 85;
-        --chart-3: 0.70 0.18 200;
-        --chart-4: 0.55 0.16 25;
-        --chart-5: 0.75 0.20 300;
-        --sidebar: 0.15 0.03 145;
-        --sidebar-foreground: 0.95 0.02 145;
-        --sidebar-primary: 0.70 0.20 145;
-        --sidebar-primary-foreground: 0.12 0.02 145;
-        --sidebar-accent: 0.25 0.05 145;
-        --sidebar-accent-foreground: 0.95 0.02 145;
-        --sidebar-border: 0.25 0.04 145;
-        --sidebar-ring: 0.70 0.20 145;
-    }
+  .dark {
+    --background: 0.12 0.02 145;
+    --foreground: 0.95 0.02 145;
+    --card: 0.18 0.03 145;
+    --card-foreground: 0.95 0.02 145;
+    --popover: 0.15 0.03 145;
+    --popover-foreground: 0.95 0.02 145;
+    --primary: 0.7 0.2 145;
+    --primary-foreground: 0.12 0.02 145;
+    --secondary: 0.25 0.05 145;
+    --secondary-foreground: 0.95 0.02 145;
+    --muted: 0.22 0.04 145;
+    --muted-foreground: 0.65 0.04 145;
+    --accent: 0.3 0.08 145;
+    --accent-foreground: 0.95 0.02 145;
+    --destructive: 0.6 0.24 25;
+    --destructive-foreground: 0.95 0.02 145;
+    --border: 0.25 0.04 145;
+    --input: 0.25 0.04 145;
+    --ring: 0.7 0.2 145;
+    --chart-1: 0.65 0.2 145;
+    --chart-2: 0.6 0.15 85;
+    --chart-3: 0.7 0.18 200;
+    --chart-4: 0.55 0.16 25;
+    --chart-5: 0.75 0.2 300;
+    --sidebar: 0.15 0.03 145;
+    --sidebar-foreground: 0.95 0.02 145;
+    --sidebar-primary: 0.7 0.2 145;
+    --sidebar-primary-foreground: 0.12 0.02 145;
+    --sidebar-accent: 0.25 0.05 145;
+    --sidebar-accent-foreground: 0.95 0.02 145;
+    --sidebar-border: 0.25 0.04 145;
+    --sidebar-ring: 0.7 0.2 145;
+  }
 
-    * {
-        @apply border-border;
-    }
+  * {
+    @apply border-border;
+  }
 
-    html,
-    body,
-    #root {
-        height: 100%;
-        overflow: hidden;
-    }
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
 
-    body {
-        @apply bg-background text-foreground;
-        overscroll-behavior: none;
-        -webkit-overflow-scrolling: touch;
-    }
+  body {
+    @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    /* Mobile layout adjustments */
-    .mobile-layout {
-        height: 100dvh;
-        display: flex;
-        flex-direction: column;
-    }
+  /* Mobile layout adjustments */
+  .mobile-layout {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    /* Safe area support for mobile devices */
-    .safe-bottom {
-        padding-bottom: env(safe-area-inset-bottom);
-    }
+  /* Safe area support for mobile devices */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 
+  .pb-safe-bottom {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 768px) {
     .pb-safe-bottom {
-        padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+      padding-bottom: 0;
+    }
+  }
+
+  /* Prevent double scroll on mobile */
+  @media (max-width: 767px) {
+    body {
+      position: fixed;
+      width: 100%;
     }
 
-    @media (min-width: 768px) {
-        .pb-safe-bottom {
-            padding-bottom: 0;
-        }
+    .mobile-layout {
+      position: relative;
+      overflow: hidden;
     }
+  }
 
-    /* Prevent double scroll on mobile */
-    @media (max-width: 767px) {
-        body {
-            position: fixed;
-            width: 100%;
-        }
-
-        .mobile-layout {
-            position: relative;
-            overflow: hidden;
-        }
+  /* Touch target improvements */
+  @media (max-width: 767px) {
+    button,
+    a,
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
     }
-
-    /* Touch target improvements */
-    @media (max-width: 767px) {
-        button,
-        a,
-        [role="button"] {
-            min-height: 44px;
-            min-width: 44px;
-        }
-    }
+  }
 }

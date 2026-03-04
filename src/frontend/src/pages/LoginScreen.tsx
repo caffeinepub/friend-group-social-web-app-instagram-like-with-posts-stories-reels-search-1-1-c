@@ -1,17 +1,23 @@
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Download } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Download } from "lucide-react";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 export default function LoginScreen() {
   const { login, loginStatus } = useInternetIdentity();
-  const isLoggingIn = loginStatus === 'logging-in';
+  const isLoggingIn = loginStatus === "logging-in";
 
   const handleDownloadAPK = () => {
     // Create a temporary link element to trigger download
-    const link = document.createElement('a');
-    link.href = '/downloads/caffeine-social.apk';
-    link.download = 'caffeine-social.apk';
+    const link = document.createElement("a");
+    link.href = "/downloads/caffeine-social.apk";
+    link.download = "caffeine-social.apk";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -22,13 +28,15 @@ export default function LoginScreen() {
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-            <img 
-              src="/assets/generated/caffeine-social-logo.dim_256x256.png" 
-              alt="Caffeine Social" 
+            <img
+              src="/assets/generated/caffeine-social-logo.dim_256x256.png"
+              alt="Caffeine Social"
               className="w-16 h-16"
             />
           </div>
-          <CardTitle className="text-3xl font-bold">Welcome to Caffeine Social</CardTitle>
+          <CardTitle className="text-3xl font-bold">
+            Welcome to Caffeine Social
+          </CardTitle>
           <CardDescription className="text-base">
             Connect with your friends, share moments, and explore together
           </CardDescription>
@@ -52,13 +60,13 @@ export default function LoginScreen() {
               Use AI tools and study features
             </p>
           </div>
-          <Button 
-            onClick={login} 
+          <Button
+            onClick={login}
             disabled={isLoggingIn}
             className="w-full h-12 text-lg font-semibold"
             size="lg"
           >
-            {isLoggingIn ? 'Connecting...' : 'Sign In with Internet Identity'}
+            {isLoggingIn ? "Connecting..." : "Sign In with Internet Identity"}
           </Button>
 
           <div className="relative">
@@ -72,7 +80,7 @@ export default function LoginScreen() {
             </div>
           </div>
 
-          <Button 
+          <Button
             onClick={handleDownloadAPK}
             variant="outline"
             className="w-full h-12 text-base font-semibold"
